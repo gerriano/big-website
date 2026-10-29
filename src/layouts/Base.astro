@@ -14,7 +14,8 @@ interface Props {
 
 const { title, description = site.description, darkHero = true, image = '/og-image.jpg' } = Astro.props;
 const fullTitle = title ? `${title} — ${site.companyName}` : `${site.companyName} — ${site.tagline}`;
-const canonical = new URL(Astro.url.pathname, Astro.site);
+// Pages are served without a trailing slash (/kontak), so canonical URLs match that form.
+const canonical = new URL(Astro.url.pathname.replace(/(.)\/$/, '$1'), Astro.site);
 // Keep the temporary *.vercel.app site out of search results; indexing turns on with the real domain.
 const noindex = Astro.site?.hostname.endsWith('.vercel.app') ?? false;
 ---
