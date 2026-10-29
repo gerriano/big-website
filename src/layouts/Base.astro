@@ -15,6 +15,8 @@ interface Props {
 const { title, description = site.description, darkHero = true, image = '/og-image.jpg' } = Astro.props;
 const fullTitle = title ? `${title} — ${site.companyName}` : `${site.companyName} — ${site.tagline}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+// Keep the temporary *.vercel.app site out of search results; indexing turns on with the real domain.
+const noindex = Astro.site?.hostname.endsWith('.vercel.app') ?? false;
 ---
 
 <!doctype html>
@@ -24,6 +26,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon.png" type="image/png" sizes="64x64" />

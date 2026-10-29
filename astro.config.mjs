@@ -2,12 +2,19 @@
 import { defineConfig, envField } from 'astro/config';
 import vercel from '@astrojs/vercel';
 
+// Until www.bhineka.global is attached, Vercel exposes the project's production domain at build time,
+// so canonical URLs and social preview images point at a host that actually serves them.
+const productionHost = process.env.VERCEL_PROJECT_PRODUCTION_URL;
+
 export default defineConfig({
-  site: 'https://www.bhineka.global',
+  site: productionHost ? `https://${productionHost}` : 'https://www.bhineka.global',
   output: 'static',
   adapter: vercel(),
   trailingSlash: 'ignore',
   devToolbar: { enabled: false },
+  // Astro's built-in origin check rejects every form POST behind Vercel's proxy. The only POST endpoint is
+  // the public contact form, which carries no session or cookies, and is guarded by Turnstile instead.
+  security: { checkOrigin: false },
   env: {
     schema: {
       SMTP_HOST: envField.string({ context: 'server', access: 'secret', optional: true }),
