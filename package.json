@@ -1,0 +1,33 @@
+{
+  "name": "big-website",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "description": "Website company profile PT Bhineka Inovasi Global",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "build:map": "node scripts/build-map.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@astrojs/vercel": "^8.2.11",
+    "@fontsource/libre-franklin": "^5.3.0",
+    "@fontsource/poppins": "^5.3.0",
+    "astro": "^5.18.2",
+    "gsap": "^3.15.0",
+    "nodemailer": "^7.0.13"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "@types/nodemailer": "^8.0.2",
+    "d3-geo": "^3.1.1",
+    "topojson-client": "^3.1.0",
+    "typescript": "^5.9.3",
+    "world-atlas": "^2.0.2"
+  }
+}

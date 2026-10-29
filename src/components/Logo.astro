@@ -1,0 +1,45 @@
+---
+import { logoViewBox, markViewBox, logoRed, logoNavyMark, logoNavyText } from '../data/logo';
+
+interface Props {
+  variant?: 'color' | 'white' | 'navy';
+  markOnly?: boolean;
+  class?: string;
+  title?: string;
+}
+
+const { variant = 'color', markOnly = false, class: className, title = 'Bhineka Inovasi Global', ...rest } = Astro.props;
+const gid = `big-grad-${Math.random().toString(36).slice(2, 8)}`;
+const redFill = variant === 'color' ? `url(#${gid})` : variant === 'white' ? '#fff' : '#003665';
+const navyFill = variant === 'white' ? '#fff' : '#003665';
+---
+
+<svg
+  class:list={['logo', className]}
+  viewBox={markOnly ? markViewBox : logoViewBox}
+  role="img"
+  aria-label={title}
+  xmlns="http://www.w3.org/2000/svg"
+  {...rest}
+>
+  {
+    variant === 'color' && (
+      <defs>
+        <linearGradient id={gid} x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#e61e25" />
+          <stop offset="1" stop-color="#b50346" />
+        </linearGradient>
+      </defs>
+    )
+  }
+  <path class="logo-red" d={logoRed} fill={redFill} fill-rule="evenodd"></path>
+  <path class="logo-navy" d={logoNavyMark} fill={navyFill} fill-rule="evenodd"></path>
+  {!markOnly && <path class="logo-text" d={logoNavyText} fill={navyFill} fill-rule="evenodd" />}
+</svg>
+
+<style>
+  .logo {
+    height: auto;
+    overflow: visible;
+  }
+</style>

@@ -1,0 +1,195 @@
+---
+import Arrow from '../Arrow.astro';
+import { getBrands } from '../../data/content';
+
+const brands = await getBrands();
+---
+
+<section class="section showcase" data-showcase>
+  <div class="container showcase-head">
+    <div>
+      <p class="eyebrow">Portofolio Brand</p>
+      <h2 class="h2" data-split>Brand yang kami distribusikan</h2>
+    </div>
+    <a href="/brand" class="btn btn--ghost showcase-all">
+      Semua brand <Arrow />
+    </a>
+  </div>
+
+  <div class="showcase-viewport" data-showcase-viewport>
+    <ul class="showcase-track" data-showcase-track>
+      {
+        brands.map((b, i) => (
+          <li class="brand-card">
+            <a href={`/brand#${b.id}`} class="brand-card-link">
+              <div class="brand-card-media">
+                <span class="brand-card-slash" aria-hidden="true" />
+                <img src={b.data.images[0]} alt={`Produk ${b.data.name}`} loading="lazy" />
+              </div>
+              <div class="brand-card-body">
+                <span class="brand-card-num">{String(i + 1).padStart(2, '0')}</span>
+                <h3 class="brand-card-name">{b.data.name}</h3>
+                <p class="brand-card-cat">{b.data.category}</p>
+              </div>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .showcase {
+    overflow: hidden;
+  }
+
+  .showcase-head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+    margin-bottom: clamp(32px, 5vw, 56px);
+  }
+
+  .showcase-all {
+    color: var(--navy);
+  }
+
+  .showcase-viewport {
+    padding-left: max(var(--gutter), calc((100vw - var(--max)) / 2));
+  }
+
+  .showcase-track {
+    display: flex;
+    gap: 24px;
+    width: max-content;
+    padding-right: var(--gutter);
+  }
+
+  .brand-card {
+    width: clamp(280px, 30vw, 400px);
+    flex: none;
+  }
+
+  .brand-card-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .brand-card-media {
+    position: relative;
+    aspect-ratio: 0.9;
+    border-radius: var(--radius-lg);
+    border-bottom-left-radius: 90px;
+    background: var(--mist);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .brand-card-slash {
+    position: absolute;
+    inset: -20% -40%;
+    z-index: -1;
+    background: var(--grad);
+    clip-path: polygon(0 100%, 100% 30%, 100% 100%);
+    transform: translateY(70%);
+    transition: transform 0.7s var(--ease);
+  }
+
+  .brand-card-media img {
+    position: absolute;
+    inset: 12%;
+    width: 76%;
+    height: 76%;
+    object-fit: contain;
+    filter: drop-shadow(0 24px 24px rgba(0, 34, 63, 0.18));
+    transition: transform 0.7s var(--ease);
+  }
+
+  .brand-card-link:hover .brand-card-slash,
+  .brand-card-link:focus-visible .brand-card-slash {
+    transform: translateY(18%);
+  }
+
+  .brand-card-link:hover img,
+  .brand-card-link:focus-visible img {
+    transform: scale(1.06) rotate(-2deg);
+  }
+
+  .brand-card-body {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 14px;
+    padding: 20px 6px 0;
+  }
+
+  .brand-card-num {
+    grid-row: span 2;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 0.85rem;
+    color: var(--grad-start);
+    padding-top: 6px;
+  }
+
+  .brand-card-name {
+    font-size: 1.7rem;
+    text-transform: uppercase;
+    color: var(--navy);
+  }
+
+  .brand-card-cat {
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  /* Touch / small screens: native horizontal scroll with snap. */
+  @media (max-width: 1023px), (hover: none) {
+    .showcase-viewport {
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      padding-left: var(--gutter);
+      scroll-padding-left: var(--gutter);
+    }
+
+    .showcase-viewport::-webkit-scrollbar {
+      display: none;
+    }
+
+    .brand-card {
+      scroll-snap-align: start;
+      width: min(78vw, 360px);
+    }
+  }
+</style>
+
+<script>
+  import { gsap, ScrollTrigger, reducedMotion } from '../../scripts/motion';
+
+  // Desktop with a mouse: pin the section and translate the track horizontally as you scroll.
+  const section = document.querySelector<HTMLElement>('[data-showcase]');
+  if (section && !reducedMotion) {
+    const track = section.querySelector<HTMLElement>('[data-showcase-track]')!;
+    const mm = gsap.matchMedia();
+    mm.add('(min-width: 1024px) and (hover: hover)', () => {
+      const distance = () => Math.max(0, track.scrollWidth - window.innerWidth + 80);
+      gsap.to(track, {
+        x: () => -distance(),
+        ease: 'none',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top top',
+          end: () => `+=${distance()}`,
+          pin: true,
+          scrub: 0.8,
+          invalidateOnRefresh: true,
+        },
+      });
+      ScrollTrigger.refresh();
+    });
+  }
+</script>

@@ -1,0 +1,123 @@
+---
+import { getBrands, getClients, getPrincipals, regions, site } from '../../data/content';
+
+const [brands, principals, clients] = await Promise.all([getBrands(), getPrincipals(), getClients()]);
+const clientCount = clients.reduce((n, c) => n + c.data.names.length, 0);
+
+const stats = [
+  { value: regions.length, label: 'Wilayah distribusi', note: 'Sumatera hingga Papua' },
+  { value: brands.length, label: 'Brand didistribusikan', note: 'Makanan, minuman & non-food' },
+  { value: principals.length, label: 'Prinsipal & supplier', note: 'Mitra prinsipal terpercaya' },
+  { value: clientCount, label: 'Klien institusi & korporat', note: 'Hotel, bank, RS, sekolah, dll.' },
+  { value: site.offices.length, label: 'Kantor operasional', note: site.offices.map((o) => o.city).join(' & ') },
+];
+---
+
+<section class="stats" aria-label="BIG dalam angka">
+  <div class="container">
+    <ul class="stats-card">
+      {
+        stats.map((s, i) => (
+          <li data-reveal style={`--delay:${i * 0.08}s`}>
+            <span class="stat-value" data-counter={s.value}>
+              {s.value}
+            </span>
+            <span class="stat-label">{s.label}</span>
+            <span class="stat-note">{s.note}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .stats {
+    position: relative;
+    z-index: 2;
+    margin-top: -56px;
+  }
+
+  .stats-card {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    background: #fff;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 40px 80px -40px rgba(0, 34, 63, 0.45);
+    overflow: hidden;
+  }
+
+  .stats-card li {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 34px 28px;
+  }
+
+  .stats-card li + li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 28px;
+    bottom: 28px;
+    width: 1px;
+    background: var(--line);
+  }
+
+  .stat-value {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(2.6rem, 4.6vw, 3.8rem);
+    line-height: 1;
+    background: var(--grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 10px;
+  }
+
+  .stat-label {
+    font-weight: 600;
+    color: var(--navy);
+    line-height: 1.3;
+  }
+
+  .stat-note {
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  @media (max-width: 1000px) {
+    .stats-card {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .stats-card li + li::before {
+      display: none;
+    }
+
+    .stats-card li {
+      border-top: 1px solid var(--line);
+    }
+
+    .stats-card li:nth-child(-n + 2) {
+      border-top: 0;
+    }
+
+    .stats-card li:nth-child(odd) {
+      border-right: 1px solid var(--line);
+    }
+
+    .stats-card li:last-child {
+      grid-column: 1 / -1;
+      border-right: 0;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .stats-card li {
+      padding: 24px 18px;
+    }
+  }
+</style>

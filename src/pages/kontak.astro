@@ -1,0 +1,510 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Arrow from '../components/Arrow.astro';
+import { site } from '../data/content';
+import { PUBLIC_TURNSTILE_SITE_KEY } from 'astro:env/client';
+---
+
+<Base title="Kontak" description="Hubungi PT Bhineka Inovasi Global untuk kemitraan prinsipal, kemitraan outlet, pemesanan produk, atau informasi lainnya.">
+  <PageHero
+    eyebrow="Kontak"
+    title="Mari tumbuh bersama"
+    lead="Sampaikan kebutuhan Anda — tim kami akan menghubungi Anda kembali melalui email atau telepon."
+    image="/images/photos/bongkar-muat.webp"
+  />
+
+  <section class="section contact">
+    <div class="container contact-grid">
+      <div class="contact-form-wrap" data-reveal>
+        <h2 class="h3 form-title">Kirim pesan</h2>
+        <p class="form-note">Kolom bertanda <span aria-hidden="true">*</span><span class="sr-only">bintang</span> wajib diisi.</p>
+
+        <form class="contact-form" method="post" action="/api/contact" data-contact-form novalidate>
+          <div class="field">
+            <label for="f-category">Kategori inquiry <span aria-hidden="true">*</span></label>
+            <div class="select">
+              <select id="f-category" name="category" required>
+                <option value="" disabled selected>Pilih kategori</option>
+                {site.inquiryCategories.map((c) => <option value={c}>{c}</option>)}
+              </select>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="f-name">Nama lengkap <span aria-hidden="true">*</span></label>
+              <input id="f-name" name="name" type="text" autocomplete="name" required maxlength="120" />
+            </div>
+            <div class="field">
+              <label for="f-company">Nama perusahaan / toko</label>
+              <input id="f-company" name="company" type="text" autocomplete="organization" maxlength="160" />
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="f-email">Email <span aria-hidden="true">*</span></label>
+              <input id="f-email" name="email" type="email" autocomplete="email" required maxlength="160" />
+            </div>
+            <div class="field">
+              <label for="f-phone">No. telepon / WhatsApp <span aria-hidden="true">*</span></label>
+              <input id="f-phone" name="phone" type="tel" autocomplete="tel" required maxlength="30" pattern="[0-9+()\-\s]{8,30}" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="f-subject">Subjek <span aria-hidden="true">*</span></label>
+            <input id="f-subject" name="subject" type="text" required maxlength="150" />
+          </div>
+
+          <div class="field">
+            <label for="f-message">Pesan <span aria-hidden="true">*</span></label>
+            <textarea id="f-message" name="message" rows="6" required maxlength="5000"></textarea>
+          </div>
+
+          <!-- Honeypot: hidden from people, tempting for bots. -->
+          <div class="hp" aria-hidden="true">
+            <label for="f-website">Website</label>
+            <input id="f-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+          </div>
+
+          <div class="cf-turnstile" data-sitekey={PUBLIC_TURNSTILE_SITE_KEY} data-language="id" data-theme="light"></div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn" data-submit>
+              <span data-submit-label>Kirim pesan</span>
+              <Arrow />
+            </button>
+            <p class="form-status" role="status" aria-live="polite" data-status></p>
+          </div>
+        </form>
+      </div>
+
+      <aside class="contact-info">
+        <div class="info-card info-card--mail" data-reveal>
+          <p class="info-label">Email</p>
+          <a href={`mailto:${site.email}`} class="info-big">{site.email}</a>
+        </div>
+
+        <div class="offices" data-offices>
+          <div class="office-tabs" role="tablist" aria-label="Lokasi kantor">
+            {
+              site.offices.map((o, i) => (
+                <button type="button" role="tab" aria-selected={i === 0 ? 'true' : 'false'} data-office={i} class="office-tab">
+                  {o.label}
+                  <span>{o.city}</span>
+                </button>
+              ))
+            }
+          </div>
+
+          {
+            site.offices.map((o, i) => (
+              <div class="office" data-office-panel={i} hidden={i !== 0}>
+                <p class="office-address">{o.address}</p>
+                <p class="office-phone">
+                  Telp. <a href={`tel:${o.phone.replace(/[^\d+]/g, '')}`}>{o.phone}</a>
+                </p>
+                <div class="map-frame">
+                  <iframe
+                    title={`Peta ${o.label} ${site.companyName}`}
+                    src={i === 0 ? `https://www.google.com/maps?q=${encodeURIComponent(o.mapQuery)}&output=embed` : undefined}
+                    data-src={`https://www.google.com/maps?q=${encodeURIComponent(o.mapQuery)}&output=embed`}
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                  />
+                </div>
+                <a class="map-link" href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(o.mapQuery)}`} target="_blank" rel="noopener">
+                  Buka di Google Maps <Arrow />
+                </a>
+              </div>
+            ))
+          }
+        </div>
+      </aside>
+    </div>
+  </section>
+</Base>
+
+<script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+<style>
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: clamp(32px, 5vw, 72px);
+    align-items: start;
+  }
+
+  .contact-form-wrap {
+    padding: clamp(24px, 4vw, 48px);
+    border-radius: var(--radius-lg);
+    background: #fff;
+    box-shadow: 0 40px 80px -50px rgba(0, 34, 63, 0.45);
+    border: 1px solid var(--line);
+  }
+
+  .form-title {
+    color: var(--navy);
+    text-transform: uppercase;
+    font-size: 1.8rem;
+  }
+
+  .form-note {
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin: 6px 0 28px;
+  }
+
+  .contact-form {
+    display: grid;
+    gap: 18px;
+  }
+
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+
+  .field {
+    display: grid;
+    gap: 8px;
+  }
+
+  .field label {
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: var(--navy);
+  }
+
+  .field label span {
+    color: var(--grad-start);
+  }
+
+  .field input,
+  .field textarea,
+  .field select {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 14px;
+    border: 1.5px solid var(--line);
+    background: var(--mist);
+    color: var(--ink);
+    font: inherit;
+    font-size: 1rem;
+    transition:
+      border-color 0.25s,
+      background 0.25s,
+      box-shadow 0.25s;
+  }
+
+  .field textarea {
+    resize: vertical;
+    min-height: 140px;
+  }
+
+  .field input:focus,
+  .field textarea:focus,
+  .field select:focus {
+    outline: none;
+    border-color: var(--navy);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(0, 54, 101, 0.1);
+  }
+
+  .field [aria-invalid='true'] {
+    border-color: var(--red);
+    background: #fff5f5;
+  }
+
+  .field-error {
+    font-size: 0.8rem;
+    color: var(--red);
+  }
+
+  .select {
+    position: relative;
+  }
+
+  .select select {
+    appearance: none;
+    padding-right: 44px;
+    cursor: pointer;
+  }
+
+  .select::after {
+    content: '';
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    width: 9px;
+    height: 9px;
+    border-right: 2px solid var(--navy);
+    border-bottom: 2px solid var(--navy);
+    transform: translateY(-70%) rotate(45deg);
+    pointer-events: none;
+  }
+
+  .hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+    margin-top: 6px;
+  }
+
+  .btn[disabled] {
+    opacity: 0.6;
+    cursor: wait;
+  }
+
+  .form-status {
+    font-size: 0.92rem;
+    font-weight: 500;
+  }
+
+  .form-status.is-ok {
+    color: #0a7a3d;
+  }
+
+  .form-status.is-error {
+    color: var(--red);
+  }
+
+  .contact-info {
+    display: grid;
+    gap: 18px;
+    position: sticky;
+    top: calc(var(--header-h) + 24px);
+  }
+
+  .info-card--mail {
+    padding: 26px 28px;
+    border-radius: var(--radius);
+    background: var(--grad);
+    color: #fff;
+  }
+
+  .info-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.85;
+    margin-bottom: 6px;
+  }
+
+  .info-big {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(1.25rem, 2.2vw, 1.6rem);
+    text-decoration: none;
+    word-break: break-word;
+  }
+
+  .offices {
+    padding: 8px;
+    border-radius: var(--radius);
+    background: var(--navy);
+    color: #fff;
+  }
+
+  .office-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+
+  .office-tab {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 12px 16px;
+    border-radius: 14px;
+    border: 0;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.7);
+    font: inherit;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-align: left;
+    cursor: pointer;
+    transition:
+      background 0.3s,
+      color 0.3s;
+  }
+
+  .office-tab span {
+    font-weight: 400;
+    font-size: 0.8rem;
+  }
+
+  .office-tab[aria-selected='true'] {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+  }
+
+  .office {
+    padding: 18px 16px 12px;
+  }
+
+  .office-address {
+    margin-bottom: 6px;
+  }
+
+  .office-phone {
+    color: rgba(255, 255, 255, 0.75);
+    margin-bottom: 16px;
+  }
+
+  .office-phone a {
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .map-frame {
+    border-radius: 16px;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    background: var(--navy-800);
+  }
+
+  .map-frame iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .map-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+  }
+
+  .map-link :global(.arrow) {
+    width: 14px;
+  }
+
+  @media (max-width: 960px) {
+    .contact-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .contact-info {
+      position: static;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .field-row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  const turnstile = () => (window as Window & { turnstile?: { reset: () => void } }).turnstile;
+
+  const form = document.querySelector<HTMLFormElement>('[data-contact-form]')!;
+  const status = form.querySelector<HTMLElement>('[data-status]')!;
+  const submit = form.querySelector<HTMLButtonElement>('[data-submit]')!;
+  const submitLabel = form.querySelector<HTMLElement>('[data-submit-label]')!;
+
+  // Preselect the inquiry category from ?kategori=... (used by CTAs elsewhere on the site).
+  const preset = new URLSearchParams(location.search).get('kategori');
+  const select = form.querySelector<HTMLSelectElement>('#f-category')!;
+  if (preset && Array.from(select.options).some((o) => o.value === preset)) select.value = preset;
+
+  const messages: Record<string, string> = {
+    valueMissing: 'Wajib diisi.',
+    typeMismatch: 'Format belum sesuai.',
+    patternMismatch: 'Format belum sesuai.',
+    tooLong: 'Terlalu panjang.',
+  };
+
+  const showError = (field: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement) => {
+    const wrap = field.closest('.field')!;
+    wrap.querySelector('.field-error')?.remove();
+    if (field.validity.valid) {
+      field.removeAttribute('aria-invalid');
+      return true;
+    }
+    const key = Object.keys(messages).find((k) => field.validity[k as keyof ValidityState]) ?? 'valueMissing';
+    const err = document.createElement('p');
+    err.className = 'field-error';
+    err.id = `${field.id}-error`;
+    err.textContent = messages[key];
+    field.setAttribute('aria-invalid', 'true');
+    field.setAttribute('aria-describedby', err.id);
+    wrap.append(err);
+    return false;
+  };
+
+  const fields = Array.from(form.querySelectorAll<HTMLInputElement>('.field input, .field select, .field textarea'));
+  fields.forEach((f) => f.addEventListener('blur', () => f.value && showError(f)));
+
+  const setStatus = (text: string, kind: 'ok' | 'error' | '') => {
+    status.textContent = text;
+    status.className = `form-status${kind ? ` is-${kind}` : ''}`;
+  };
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const invalid = fields.map(showError).some((ok) => !ok);
+    if (invalid) {
+      setStatus('Mohon periksa kembali kolom yang ditandai.', 'error');
+      form.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
+      return;
+    }
+    const data = new FormData(form);
+    if (!data.get('cf-turnstile-response')) {
+      setStatus('Mohon selesaikan verifikasi keamanan terlebih dahulu.', 'error');
+      return;
+    }
+
+    submit.disabled = true;
+    submitLabel.textContent = 'Mengirim…';
+    setStatus('', '');
+    try {
+      const res = await fetch(form.action, { method: 'POST', body: data, headers: { Accept: 'application/json' } });
+      const json = (await res.json().catch(() => ({}))) as { ok?: boolean; message?: string };
+      if (!res.ok || !json.ok) throw new Error(json.message || 'Pesan gagal terkirim. Silakan coba lagi.');
+      form.reset();
+      setStatus('Terima kasih! Pesan Anda sudah kami terima. Tim kami akan segera menghubungi Anda.', 'ok');
+    } catch (err) {
+      setStatus(err instanceof Error ? err.message : 'Pesan gagal terkirim. Silakan coba lagi.', 'error');
+    } finally {
+      turnstile()?.reset();
+      submit.disabled = false;
+      submitLabel.textContent = 'Kirim pesan';
+    }
+  });
+
+  // Office tabs swap the address and lazily load each map.
+  const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-office]'));
+  tabs.forEach((tab) =>
+    tab.addEventListener('click', () => {
+      tabs.forEach((t) => t.setAttribute('aria-selected', String(t === tab)));
+      document.querySelectorAll<HTMLElement>('[data-office-panel]').forEach((panel) => {
+        const on = panel.dataset.officePanel === tab.dataset.office;
+        panel.hidden = !on;
+        const frame = panel.querySelector('iframe');
+        if (on && frame && !frame.src) frame.src = frame.dataset.src!;
+      });
+    }),
+  );
+</script>

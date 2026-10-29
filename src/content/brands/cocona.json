@@ -1,0 +1,10 @@
+{
+  "name": "Cocona",
+  "category": "Makanan & Minuman",
+  "principal": "",
+  "description": "Sari kelapa (nata de coco) dan minuman jelly dalam cup siap santap.",
+  "images": [
+    "/images/products/cocona.webp"
+  ],
+  "order": 4
+}

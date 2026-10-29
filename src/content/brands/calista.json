@@ -1,0 +1,11 @@
+{
+  "name": "Calista",
+  "category": "Minuman",
+  "principal": "",
+  "description": "Minuman dalam kemasan kotak dengan varian jus jambu dan teh melati.",
+  "images": [
+    "/images/products/calista-jambu.webp",
+    "/images/products/teh-calista.webp"
+  ],
+  "order": 2
+}

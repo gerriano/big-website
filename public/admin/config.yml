@@ -1,0 +1,201 @@
+# Decap CMS — panel konten untuk tim BIG. Setiap "Publish" membuat commit ke branch main,
+# lalu Vercel otomatis membangun ulang situs (±1–2 menit).
+backend:
+  name: github
+  repo: gerriano/big-website
+  branch: main
+  commit_messages:
+    create: 'konten: tambah {{collection}} "{{slug}}"'
+    update: 'konten: ubah {{collection}} "{{slug}}"'
+    delete: 'konten: hapus {{collection}} "{{slug}}"'
+    uploadMedia: 'media: unggah "{{path}}"'
+    deleteMedia: 'media: hapus "{{path}}"'
+
+site_url: https://www.bhineka.global
+display_url: https://www.bhineka.global
+logo_url: /favicon.svg
+media_folder: public/uploads
+public_folder: /uploads
+
+collections:
+  - name: brands
+    label: Brand
+    label_singular: Brand
+    description: Brand yang didistribusikan BIG. Gunakan foto produk berlatar transparan (PNG/WebP), maks. ±500 KB.
+    folder: src/content/brands
+    extension: json
+    format: json
+    create: true
+    slug: '{{slug}}'
+    identifier_field: name
+    sortable_fields: [order, name]
+    summary: '{{order}}. {{name}} — {{category}}'
+    fields:
+      - { label: Nama brand, name: name, widget: string }
+      - { label: Kategori, name: category, widget: string, hint: 'Brand dengan kategori sama akan dikelompokkan pada filter halaman Brand.' }
+      - { label: Prinsipal, name: principal, widget: string, required: false }
+      - { label: Deskripsi singkat, name: description, widget: text }
+      - label: Foto produk
+        name: images
+        widget: list
+        min: 1
+        hint: Foto pertama dipakai sebagai foto utama.
+        field: { label: Foto, name: image, widget: image }
+      - { label: Urutan tampil, name: order, widget: number, value_type: int, default: 99 }
+
+  - name: principals
+    label: Prinsipal & Supplier
+    label_singular: Prinsipal
+    folder: src/content/principals
+    extension: json
+    format: json
+    create: true
+    slug: '{{slug}}'
+    identifier_field: name
+    summary: '{{order}}. {{name}}'
+    fields:
+      - { label: Nama perusahaan, name: name, widget: string }
+      - { label: Foto, name: image, widget: image, required: false }
+      - { label: Urutan tampil, name: order, widget: number, value_type: int, default: 99 }
+
+  - name: clients
+    label: Klien & Mitra
+    label_singular: Kategori klien
+    description: Jumlah klien di website dihitung otomatis dari daftar ini.
+    folder: src/content/clients
+    extension: json
+    format: json
+    create: true
+    slug: '{{slug}}'
+    identifier_field: category
+    summary: '{{order}}. {{category}}'
+    fields:
+      - { label: Kategori, name: category, widget: string }
+      - label: Daftar nama klien
+        name: names
+        widget: list
+        field: { label: Nama, name: name, widget: string }
+      - { label: Urutan tampil, name: order, widget: number, value_type: int, default: 99 }
+
+  - name: pages
+    label: Halaman
+    files:
+      - name: home
+        label: Beranda
+        file: src/content/pages/home.json
+        format: json
+        fields:
+          - label: Hero
+            name: hero
+            widget: object
+            fields:
+              - { label: Label kecil, name: eyebrow, widget: string }
+              - { label: Judul, name: title, widget: string }
+              - { label: Subjudul, name: subtitle, widget: text }
+              - label: Tombol utama
+                name: primaryCta
+                widget: object
+                fields: [{ label: Teks, name: label, widget: string }, { label: Link, name: href, widget: string }]
+              - label: Tombol kedua
+                name: secondaryCta
+                widget: object
+                fields: [{ label: Teks, name: label, widget: string }, { label: Link, name: href, widget: string }]
+          - label: Tentang BIG (ringkas)
+            name: intro
+            widget: object
+            fields:
+              - { label: Label kecil, name: eyebrow, widget: string }
+              - { label: Judul, name: heading, widget: string }
+              - { label: Teks, name: text, widget: text }
+              - label: Keunggulan
+                name: pillars
+                widget: list
+                fields: [{ label: Judul, name: title, widget: string }, { label: Teks, name: text, widget: text }]
+          - label: Area distribusi
+            name: distribution
+            widget: object
+            fields:
+              - { label: Label kecil, name: eyebrow, widget: string }
+              - { label: Judul, name: heading, widget: string }
+              - { label: Teks, name: text, widget: text }
+          - label: Kanal pasar
+            name: channels
+            widget: object
+            fields:
+              - { label: Label kecil, name: eyebrow, widget: string }
+              - { label: Judul, name: heading, widget: string }
+              - label: Kanal
+                name: items
+                widget: list
+                hint: 'Ikon tersedia untuk: Ritel Modern, Pasar Tradisional, Horeca, E-Commerce, Institusi.'
+                fields: [{ label: Judul, name: title, widget: string }, { label: Teks, name: text, widget: string }]
+          - label: Ajakan (CTA) penutup
+            name: cta
+            widget: object
+            fields:
+              - { label: Judul, name: heading, widget: string }
+              - { label: Teks, name: text, widget: text }
+              - label: Tombol utama
+                name: primaryCta
+                widget: object
+                fields: [{ label: Teks, name: label, widget: string }, { label: Link, name: href, widget: string }]
+              - label: Tombol kedua
+                name: secondaryCta
+                widget: object
+                fields: [{ label: Teks, name: label, widget: string }, { label: Link, name: href, widget: string }]
+
+      - name: about
+        label: Tentang Kami
+        file: src/content/pages/about.json
+        format: json
+        fields:
+          - { label: Label halaman, name: heading, widget: string }
+          - { label: Kalimat pembuka, name: lead, widget: text }
+          - label: Profil singkat (paragraf)
+            name: paragraphs
+            widget: list
+            field: { label: Paragraf, name: paragraph, widget: text }
+          - { label: Visi, name: vision, widget: text }
+          - label: Misi
+            name: mission
+            widget: list
+            field: { label: Butir misi, name: item, widget: string }
+          - label: Makna logo
+            name: brandStory
+            widget: object
+            fields: [{ label: Judul, name: heading, widget: string }, { label: Teks, name: text, widget: text }]
+          - label: Galeri gudang & armada
+            name: gallery
+            widget: list
+            hint: Disarankan 6 foto; foto pertama tampil paling besar.
+            fields: [{ label: Foto, name: image, widget: image }, { label: Keterangan, name: caption, widget: string }]
+
+  - name: settings
+    label: Pengaturan
+    files:
+      - name: site
+        label: Info perusahaan & kontak
+        file: src/content/settings/site.json
+        format: json
+        fields:
+          - { label: Nama perusahaan, name: companyName, widget: string }
+          - { label: Nama singkat, name: shortName, widget: string }
+          - { label: Tagline, name: tagline, widget: string }
+          - { label: Deskripsi (SEO & footer), name: description, widget: text }
+          - { label: Email, name: email, widget: string }
+          - { label: Nama grup, name: groupName, widget: string }
+          - { label: Induk perusahaan, name: parentCompany, widget: string }
+          - label: Kantor
+            name: offices
+            widget: list
+            fields:
+              - { label: Label (mis. Head Office), name: label, widget: string }
+              - { label: Kota, name: city, widget: string }
+              - { label: Alamat, name: address, widget: text }
+              - { label: Telepon, name: phone, widget: string }
+              - { label: Kata kunci Google Maps, name: mapQuery, widget: string, hint: 'Alamat yang dicari di Google Maps untuk peta.' }
+          - label: Kategori inquiry (dropdown form kontak)
+            name: inquiryCategories
+            widget: list
+            hint: Teks kategori dipakai sebagai awalan subjek email, mis. [Kemitraan Prinsipal].
+            field: { label: Kategori, name: category, widget: string }

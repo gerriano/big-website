@@ -1,0 +1,29 @@
+{
+  "heading": "Tentang Kami",
+  "lead": "Distributor consumer goods yang membantu mitra bisnis tumbuh secara berkelanjutan.",
+  "paragraphs": [
+    "PT Bhineka Inovasi Global (PT BIG) hadir menjadi distributor dalam bidang consumer goods yang mampu membantu mitra bisnis dalam diferensiasi produk yang dijual. Sebagai subsidiary dari PT Atlantic Biruraya dan merupakan bagian dari Mikatasa Group, PT Bhineka Inovasi Global memiliki jaringan distribusi mulai dari Pulau Jawa, Bali, Kalimantan, Sulawesi, Sumatera hingga Papua.",
+    "Dengan pengalaman di pasar tradisional dan modern, horeca maupun e-commerce, PT BIG telah membantu setiap mitra bisnis terus berkembang secara berkelanjutan. Ini dilakukan dengan memastikan mitra bisnis tidak hanya mendapatkan produk yang berkualitas, tetapi juga mendapatkan dukungan sistem yang efisien, layanan pengguna yang cepat tanggap, serta solutif dalam berbagai situasi."
+  ],
+  "vision": "Menjadi perusahaan distribusi terpercaya dan terdepan di Indonesia dengan jaringan yang kuat, efisien, dan berkelanjutan.",
+  "mission": [
+    "Menyediakan layanan distribusi yang cepat, tepat, dan andal.",
+    "Mengembangkan jaringan distribusi yang luas dan terintegrasi di seluruh Indonesia.",
+    "Membangun kemitraan jangka panjang yang saling menguntungkan.",
+    "Mengoptimalkan sistem logistik untuk efisiensi dan kualitas layanan.",
+    "Menjaga kepuasan pelanggan melalui layanan yang konsisten dan tepat waktu.",
+    "Mendorong inovasi serta pengembangan sumber daya manusia."
+  ],
+  "brandStory": {
+    "heading": "Kami bergerak. Kami menjangkau. Kami tumbuh.",
+    "text": "Huruf \"B\" pada logo BIG dirancang sebagai anak panah yang bergerak maju — simbol distribusi sebagai kekuatan yang bergerak tanpa hambatan. Navy melambangkan kepercayaan dan stabilitas; gradasi merah memberi sinyal aksi dan kepercayaan diri. Bersama, keduanya menyampaikan bahwa BIG adalah mitra yang dapat diandalkan sekaligus selalu selangkah lebih maju."
+  },
+  "gallery": [
+    { "image": "/images/photos/gudang-luas.webp", "caption": "Area penyimpanan gudang" },
+    { "image": "/images/photos/forklift-operator.webp", "caption": "Penanganan barang dengan forklift" },
+    { "image": "/images/photos/armada-gudang.webp", "caption": "Armada distribusi" },
+    { "image": "/images/photos/bongkar-muat.webp", "caption": "Aktivitas bongkar muat" },
+    { "image": "/images/photos/rak-gudang.webp", "caption": "Sistem rak penyimpanan" },
+    { "image": "/images/photos/tim-lapangan.webp", "caption": "Tim lapangan BIG" }
+  ]
+}

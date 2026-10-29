@@ -1,0 +1,116 @@
+---
+import { getPrincipals } from '../../data/content';
+
+interface Props {
+  heading?: string;
+  text?: string;
+}
+
+const {
+  heading = 'Dipercaya prinsipal & supplier',
+  text = 'Kami dipercaya oleh berbagai prinsipal dan supplier untuk mendistribusikan produk kebutuhan sehari-hari ke pasar Indonesia. Kepercayaan ini didukung oleh jaringan distribusi yang solid, operasional yang efisien, dan komitmen kami dalam menjaga kualitas serta ketepatan layanan.',
+} = Astro.props;
+const principals = await getPrincipals();
+---
+
+<section class="section principals">
+  <div class="container">
+    <div class="principals-head">
+      <div>
+        <p class="eyebrow">Prinsipal & Supplier</p>
+        <h2 class="h2" data-split>{heading}</h2>
+      </div>
+      <p class="lead" data-reveal>{text}</p>
+    </div>
+
+    <ul class="principal-grid">
+      {
+        principals.map((p, i) => (
+          <li class="principal" data-reveal style={`--delay:${i * 0.08}s`}>
+            <div class="principal-media">
+              {p.data.image && <img src={p.data.image} alt={`Kantor ${p.data.name}`} loading="lazy" />}
+            </div>
+            <h3 class="principal-name">{p.data.name}</h3>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .principals-head {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: end;
+    margin-bottom: clamp(32px, 5vw, 56px);
+  }
+
+  .principal-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+  }
+
+  .principal-media {
+    position: relative;
+    aspect-ratio: 0.85;
+    border-radius: var(--radius);
+    border-top-right-radius: 64px;
+    overflow: hidden;
+    background: var(--mist);
+  }
+
+  .principal-media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--grad);
+    mix-blend-mode: multiply;
+    opacity: 0;
+    transition: opacity 0.5s var(--ease);
+  }
+
+  .principal-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s var(--ease);
+  }
+
+  .principal:hover .principal-media::after {
+    opacity: 0.55;
+  }
+
+  .principal:hover img {
+    transform: scale(1.08);
+  }
+
+  .principal-name {
+    margin-top: 14px;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.98rem;
+    letter-spacing: 0;
+    line-height: 1.35;
+    color: var(--navy);
+  }
+
+  @media (max-width: 1000px) {
+    .principals-head {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .principal-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .principal-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

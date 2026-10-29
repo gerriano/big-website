@@ -1,0 +1,10 @@
+{
+  "name": "New Bie",
+  "category": "Makanan Ringan",
+  "principal": "",
+  "description": "Camilan renyah (crunchy snack) dalam kemasan pouch dengan beragam varian rasa.",
+  "images": [
+    "/images/products/new-bie.webp"
+  ],
+  "order": 6
+}

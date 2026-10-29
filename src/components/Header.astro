@@ -1,0 +1,336 @@
+---
+import Logo from './Logo.astro';
+
+interface Props {
+  /** Header starts transparent with light text over a dark hero. */
+  overDark?: boolean;
+}
+
+const { overDark = true } = Astro.props;
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const nav = [
+  { href: '/', label: 'Beranda' },
+  { href: '/brand', label: 'Brand' },
+  { href: '/tentang-kami', label: 'Tentang Kami' },
+  { href: '/kontak', label: 'Kontak' },
+];
+---
+
+<header class:list={['site-header', { 'over-dark': overDark }]} data-header>
+  <div class="container header-inner">
+    <a href="/" class="brand" aria-label="Beranda — Bhineka Inovasi Global">
+      <Logo class="brand-logo brand-logo--color" />
+      <Logo class="brand-logo brand-logo--white" variant="white" />
+    </a>
+
+    <nav class="nav" aria-label="Navigasi utama">
+      <ul>
+        {
+          nav.map((item) => (
+            <li>
+              <a href={item.href} aria-current={path === item.href ? 'page' : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <a href="/kontak" class="btn header-cta">Hubungi Kami</a>
+
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" data-menu-toggle>
+      <span class="sr-only">Buka menu</span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+  </div>
+
+  <div class="mobile-menu" id="mobile-menu" data-mobile-menu hidden>
+    <div class="mobile-menu-bg"></div>
+    <nav class="container" aria-label="Navigasi seluler">
+      <ul>
+        {
+          nav.map((item, i) => (
+            <li style={`--i:${i}`}>
+              <a href={item.href} aria-current={path === item.href ? 'page' : undefined}>
+                <span class="num">0{i + 1}</span>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <a href="mailto:info@bhineka.global" class="mobile-mail">info@bhineka.global</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 50;
+    height: var(--header-h);
+    color: var(--navy);
+    transition:
+      background-color 0.4s var(--ease),
+      box-shadow 0.4s var(--ease),
+      transform 0.5s var(--ease),
+      color 0.4s;
+  }
+
+  .site-header.over-dark:not(.is-scrolled):not(.menu-open) {
+    color: #fff;
+  }
+
+  .site-header.is-scrolled {
+    background: rgba(255, 255, 255, 0.86);
+    backdrop-filter: saturate(160%) blur(14px);
+    -webkit-backdrop-filter: saturate(160%) blur(14px);
+    box-shadow: 0 1px 0 var(--line);
+  }
+
+  .site-header.is-hidden {
+    transform: translateY(-100%);
+  }
+
+  .header-inner {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .brand {
+    position: relative;
+    z-index: 2;
+    display: block;
+    width: 112px;
+    flex: none;
+  }
+
+  .brand-logo {
+    width: 100%;
+    transition: opacity 0.3s;
+  }
+
+  .brand-logo--white {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+  }
+
+  .over-dark:not(.is-scrolled):not(.menu-open) .brand-logo--white {
+    opacity: 1;
+  }
+
+  .over-dark:not(.is-scrolled):not(.menu-open) .brand-logo--color {
+    opacity: 0;
+  }
+
+  .nav {
+    margin-left: auto;
+  }
+
+  .nav ul {
+    display: flex;
+    gap: 6px;
+  }
+
+  .nav a {
+    position: relative;
+    display: block;
+    padding: 10px 16px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    text-decoration: none;
+  }
+
+  .nav a::after {
+    content: '';
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    bottom: 4px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--grad);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.45s var(--ease);
+  }
+
+  .nav a:hover::after,
+  .nav a[aria-current='page']::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  .header-cta {
+    min-height: 44px;
+    padding: 0 20px;
+    font-size: 0.9rem;
+  }
+
+  .menu-toggle {
+    display: none;
+    position: relative;
+    z-index: 2;
+    width: 48px;
+    height: 48px;
+    margin-left: auto;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .menu-toggle .bar {
+    position: absolute;
+    left: 13px;
+    width: 22px;
+    height: 2px;
+    background: currentColor;
+    border-radius: 2px;
+    transition: transform 0.4s var(--ease);
+  }
+
+  .menu-toggle .bar:first-of-type {
+    top: 20px;
+  }
+
+  .menu-toggle .bar:last-of-type {
+    top: 27px;
+  }
+
+  .menu-open .menu-toggle .bar:first-of-type {
+    transform: translateY(3.5px) rotate(45deg);
+  }
+
+  .menu-open .menu-toggle .bar:last-of-type {
+    transform: translateY(-3.5px) rotate(-45deg);
+  }
+
+  .mobile-menu {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    padding-top: calc(var(--header-h) + 24px);
+    color: var(--navy);
+  }
+
+  .mobile-menu-bg {
+    position: absolute;
+    inset: 0;
+    background: #fff;
+    clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+    transition: clip-path 0.6s var(--ease);
+  }
+
+  .mobile-menu.is-open .mobile-menu-bg {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+
+  .mobile-menu nav {
+    position: relative;
+  }
+
+  .mobile-menu li {
+    border-bottom: 1px solid var(--line);
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+      opacity 0.5s var(--ease),
+      transform 0.5s var(--ease);
+    transition-delay: calc(0.15s + var(--i) * 0.06s);
+  }
+
+  .mobile-menu.is-open li {
+    opacity: 1;
+    transform: none;
+  }
+
+  .mobile-menu li a {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    padding: 18px 0;
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(2rem, 9vw, 2.8rem);
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+  }
+
+  .mobile-menu li a[aria-current='page'] {
+    color: var(--grad-start);
+  }
+
+  .mobile-menu .num {
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--muted);
+  }
+
+  .mobile-mail {
+    display: inline-block;
+    margin-top: 28px;
+    font-weight: 500;
+  }
+
+  @media (max-width: 900px) {
+    .nav,
+    .header-cta {
+      display: none;
+    }
+
+    .menu-toggle {
+      display: block;
+    }
+
+    .brand {
+      width: 96px;
+    }
+  }
+</style>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-header]')!;
+  const toggle = header.querySelector<HTMLButtonElement>('[data-menu-toggle]')!;
+  const menu = header.querySelector<HTMLElement>('[data-mobile-menu]')!;
+
+  let lastY = window.scrollY;
+  const onScroll = () => {
+    const y = window.scrollY;
+    header.classList.toggle('is-scrolled', y > 24);
+    header.classList.toggle('is-hidden', y > lastY && y > 400 && !header.classList.contains('menu-open'));
+    lastY = y;
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  const setOpen = (open: boolean) => {
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.querySelector('.sr-only')!.textContent = open ? 'Tutup menu' : 'Buka menu';
+    header.classList.toggle('menu-open', open);
+    document.documentElement.style.overflow = open ? 'hidden' : '';
+    if (open) {
+      menu.hidden = false;
+      requestAnimationFrame(() => menu.classList.add('is-open'));
+    } else {
+      menu.classList.remove('is-open');
+      setTimeout(() => {
+        if (!menu.classList.contains('is-open')) menu.hidden = true;
+      }, 600);
+    }
+  };
+
+  toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && header.classList.contains('menu-open')) setOpen(false);
+  });
+</script>

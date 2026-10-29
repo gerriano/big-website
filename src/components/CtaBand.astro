@@ -1,0 +1,101 @@
+---
+import Arrow from './Arrow.astro';
+import { home } from '../data/content';
+
+interface Props {
+  heading?: string;
+  text?: string;
+  primary?: { label: string; href: string };
+  secondary?: { label: string; href: string };
+}
+
+const { heading = home.cta.heading, text = home.cta.text, primary = home.cta.primaryCta, secondary = home.cta.secondaryCta } = Astro.props;
+---
+
+<section class="cta on-dark" data-cta>
+  <svg class="cta-arrow" viewBox="0 0 100 60" preserveAspectRatio="xMaxYMax meet" aria-hidden="true">
+    <path d="M0 62L92 14" stroke="#fff" stroke-width="2.4" stroke-linecap="round" pathLength="1" class="cta-arrow-line"></path>
+    <path d="M88.4 10.3L97.3 11.2L93 19.1Z" fill="#fff" class="cta-arrow-head"></path>
+  </svg>
+  <div class="container cta-inner">
+    <h2 class="h2 cta-title" data-split>{heading}</h2>
+    <p class="lead" data-reveal>{text}</p>
+    <div class="btn-row" data-reveal>
+      <a href={primary.href} class="btn btn--light">{primary.label} <Arrow /></a>
+      {secondary && <a href={secondary.href} class="btn btn--ghost">{secondary.label}</a>}
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta {
+    position: relative;
+    overflow: hidden;
+    background: var(--grad);
+    color: #fff;
+    padding-block: clamp(80px, 11vw, 150px);
+    isolation: isolate;
+  }
+
+  .cta::before {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 70%;
+    height: 70%;
+    z-index: -1;
+    background: var(--navy);
+    clip-path: polygon(100% 0, 100% 100%, 0 100%);
+  }
+
+  .cta-arrow {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 74%;
+    height: 78%;
+    z-index: -1;
+    opacity: 0.95;
+    overflow: visible;
+  }
+
+  .cta-inner {
+    position: relative;
+  }
+
+  @media (max-width: 700px) {
+    .cta::before {
+      height: 34%;
+    }
+
+    .cta-arrow {
+      width: 100%;
+      height: 32%;
+    }
+  }
+
+  .cta-title {
+    max-width: 12em;
+    font-size: clamp(2.2rem, 5.6vw, 4.6rem);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .cta .lead {
+    color: rgba(255, 255, 255, 0.88);
+    margin-bottom: 34px;
+  }
+</style>
+
+<script>
+  import { gsap, reducedMotion } from '../scripts/motion';
+
+  document.querySelectorAll<HTMLElement>('[data-cta]').forEach((cta) => {
+    if (reducedMotion) return;
+    gsap
+      .timeline({ scrollTrigger: { trigger: cta, start: 'top 70%' } })
+      .fromTo(cta.querySelector('.cta-arrow-line'), { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.3, ease: 'power3.inOut' })
+      .from(cta.querySelector('.cta-arrow-head'), { scale: 0, transformOrigin: '50% 50%', duration: 0.7, ease: 'back.out(2.4)' }, 1);
+  });
+</script>

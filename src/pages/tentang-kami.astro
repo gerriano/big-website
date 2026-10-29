@@ -1,0 +1,624 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Logo from '../components/Logo.astro';
+import DistributionMap from '../components/DistributionMap.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { about, getClients, site } from '../data/content';
+
+const clients = await getClients();
+const clientTotal = clients.reduce((n, c) => n + c.data.names.length, 0);
+---
+
+<Base title="Tentang Kami" description="Profil PT Bhineka Inovasi Global: subsidiary PT Atlantic Biruraya, bagian dari Mikatasa Group. Visi, misi, infrastruktur, dan klien kami.">
+  <PageHero eyebrow={about.heading} title="Bergerak maju bersama mitra" lead={about.lead} image="/images/photos/gudang-interior.webp" />
+
+  <!-- Profil -->
+  <section class="section profile">
+    <div class="container profile-grid">
+      <div>
+        <p class="eyebrow">Profil Singkat</p>
+        <h2 class="h2" data-split>Distributor consumer goods untuk pasar Indonesia</h2>
+      </div>
+      <div class="profile-copy">
+        {about.paragraphs.map((p) => <p data-reveal>{p}</p>)}
+      </div>
+    </div>
+  </section>
+
+  <!-- Struktur grup -->
+  <section class="section section--mist group" data-group>
+    <div class="container">
+      <div class="group-head">
+        <p class="eyebrow">Struktur Grup</p>
+        <h2 class="h2" data-split>Bagian dari {site.groupName}</h2>
+      </div>
+
+      <div class="tree" role="list" aria-label="Struktur grup perusahaan">
+        <div class="tree-node tree-node--root" role="listitem">
+          <span class="tree-label">Grup Korporasi</span>
+          <strong>{site.groupName}</strong>
+        </div>
+        <svg class="tree-lines" viewBox="0 0 600 120" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M300 0V50M150 50H450M150 50V120M450 50V120" pathLength="1"></path>
+        </svg>
+        <div class="tree-row">
+          <div class="tree-col">
+            <div class="tree-node" role="listitem">
+              <span class="tree-label">Perusahaan</span>
+              <strong>{site.parentCompany}</strong>
+            </div>
+            <svg class="tree-lines tree-lines--short" viewBox="0 0 100 60" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M50 0V60" pathLength="1"></path>
+            </svg>
+            <div class="tree-node tree-node--big" role="listitem">
+              <span class="tree-label">Subsidiary · Distribusi</span>
+              <Logo variant="white" class="tree-logo" />
+              <strong class="sr-only">{site.companyName}</strong>
+            </div>
+          </div>
+          <div class="tree-col">
+            <div class="tree-node" role="listitem">
+              <span class="tree-label">Perusahaan</span>
+              <strong>PT Mikatasa Agung</strong>
+            </div>
+            <p class="tree-more">dan perusahaan lain di bawah {site.groupName}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Visi & Misi -->
+  <section class="section section--navy vm">
+    <div class="vm-slash" aria-hidden="true"></div>
+    <div class="container vm-grid">
+      <div class="vm-vision">
+        <p class="eyebrow">Visi</p>
+        <p class="vm-vision-text" data-split>{about.vision}</p>
+      </div>
+      <div>
+        <p class="eyebrow">Misi</p>
+        <ol class="mission">
+          {
+            about.mission.map((m, i) => (
+              <li data-reveal style={`--delay:${(i % 2) * 0.08}s`}>
+                <span class="mission-num">{String(i + 1).padStart(2, '0')}</span>
+                <p>{m}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- Makna brand -->
+  <section class="section story">
+    <div class="container story-grid">
+      <div class="story-logo" data-story-logo>
+        <Logo class="story-logo-svg" />
+      </div>
+      <div>
+        <p class="eyebrow">Identitas Baru</p>
+        <h2 class="h2" data-split>{about.brandStory.heading}</h2>
+        <p class="lead" data-reveal>{about.brandStory.text}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Infrastruktur -->
+  <section class="section section--mist infra">
+    <div class="container">
+      <div class="infra-head">
+        <p class="eyebrow">Gudang & Armada</p>
+        <h2 class="h2" data-split>Infrastruktur yang mendukung setiap pengiriman</h2>
+      </div>
+      <ul class="gallery">
+        {
+          about.gallery.map((g, i) => (
+            <li class:list={['gallery-item', `gallery-item--${i + 1}`]} data-reveal style={`--delay:${(i % 3) * 0.08}s`}>
+              <img src={g.image} alt={g.caption} loading="lazy" />
+              <span class="gallery-cap">{g.caption}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <DistributionMap />
+
+  <!-- Klien & Mitra -->
+  <section class="section clients-full" data-clients>
+    <div class="container">
+      <div class="cf-head">
+        <div>
+          <p class="eyebrow">Klien & Mitra</p>
+          <h2 class="h2">
+            <span class="text-grad" data-counter={clientTotal}>{clientTotal}</span> klien institusi & korporat
+          </h2>
+        </div>
+        <p class="lead" data-reveal>
+          Produk yang kami distribusikan hadir di hotel, rumah sakit, bank, kantor korporasi, sekolah, apartemen, hingga restoran.
+        </p>
+      </div>
+
+      <div class="cf-tabs" role="tablist" aria-label="Kategori klien">
+        {
+          clients.map((c, i) => (
+            <button
+              type="button"
+              role="tab"
+              id={`tab-${c.id}`}
+              aria-controls={`panel-${c.id}`}
+              aria-selected={i === 0 ? 'true' : 'false'}
+              tabindex={i === 0 ? 0 : -1}
+              class="cf-tab"
+            >
+              {c.data.category}
+              <span>{c.data.names.length}</span>
+            </button>
+          ))
+        }
+      </div>
+
+      {
+        clients.map((c, i) => (
+          <div class="cf-panel" role="tabpanel" id={`panel-${c.id}`} aria-labelledby={`tab-${c.id}`} hidden={i !== 0}>
+            <ul>
+              {c.data.names.map((n) => (
+                <li>{n}</li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>
+
+<style>
+  .profile-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: clamp(32px, 6vw, 96px);
+  }
+
+  .profile-copy {
+    display: grid;
+    gap: 20px;
+    font-size: 1.05rem;
+    color: var(--muted);
+  }
+
+  .profile-copy p:first-child {
+    font-size: 1.2rem;
+    color: var(--ink);
+  }
+
+  /* Group tree */
+  .group-head {
+    text-align: center;
+    margin-bottom: clamp(40px, 5vw, 64px);
+  }
+
+  .group-head .eyebrow {
+    justify-content: center;
+  }
+
+  .tree {
+    max-width: 860px;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .tree-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 22px 30px;
+    min-width: 260px;
+    border-radius: var(--radius);
+    background: #fff;
+    border: 1px solid var(--line);
+    text-align: center;
+    color: var(--navy);
+  }
+
+  .tree-node strong {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 1.25rem;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+  }
+
+  .tree-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .tree-node--root {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: #fff;
+  }
+
+  .tree-node--root .tree-label {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .tree-node--big {
+    background: var(--grad);
+    border: 0;
+    color: #fff;
+    padding: 26px 34px;
+    box-shadow: 0 30px 60px -30px rgba(181, 3, 70, 0.7);
+  }
+
+  .tree-node--big .tree-label {
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 8px;
+  }
+
+  .tree-node--big :global(.tree-logo) {
+    width: 150px;
+  }
+
+  .tree-lines {
+    width: 50%;
+    height: 70px;
+    overflow: visible;
+  }
+
+  .tree-lines path {
+    fill: none;
+    stroke: var(--navy);
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .tree-lines--short {
+    width: 40px;
+    height: 44px;
+  }
+
+  .tree-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+  }
+
+  .tree-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .tree-more {
+    margin-top: 16px;
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-align: center;
+    max-width: 22ch;
+  }
+
+  /* Vision & mission */
+  .vm {
+    overflow: hidden;
+  }
+
+  .vm-slash {
+    position: absolute;
+    left: -10%;
+    bottom: -30%;
+    width: 60%;
+    height: 90%;
+    background: linear-gradient(120deg, rgba(230, 30, 37, 0.25), rgba(181, 3, 70, 0));
+    transform: skewX(-30deg);
+    pointer-events: none;
+  }
+
+  .vm-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: clamp(40px, 7vw, 110px);
+  }
+
+  .vm-vision-text {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(1.7rem, 3.4vw, 2.8rem);
+    line-height: 1.12;
+    letter-spacing: -0.015em;
+  }
+
+  .mission {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    padding: 0;
+    list-style: none;
+  }
+
+  .mission li {
+    padding: 24px;
+    border-radius: var(--radius);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--line-light);
+  }
+
+  .mission-num {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 1.6rem;
+    margin-bottom: 10px;
+    background: var(--grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .mission p {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.95rem;
+  }
+
+  /* Brand story */
+  .story-grid {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: clamp(40px, 7vw, 110px);
+    align-items: center;
+  }
+
+  .story-logo {
+    padding: clamp(32px, 5vw, 64px);
+    border-radius: var(--radius-lg);
+    background: var(--mist);
+  }
+
+  .story-logo :global(.story-logo-svg) {
+    width: 100%;
+  }
+
+  .story .h2 {
+    margin-bottom: 20px;
+  }
+
+  /* Gallery */
+  .infra-head {
+    max-width: 720px;
+    margin-bottom: clamp(32px, 5vw, 56px);
+  }
+
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: clamp(160px, 18vw, 260px);
+    gap: 14px;
+  }
+
+  .gallery-item {
+    position: relative;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: #dfe6ee;
+  }
+
+  .gallery-item--1 {
+    grid-column: span 2;
+    grid-row: span 2;
+    border-bottom-left-radius: 90px;
+  }
+
+  .gallery-item--4,
+  .gallery-item--5,
+  .gallery-item--6 {
+    grid-column: span 2;
+  }
+
+  .gallery-item--6 {
+    border-top-right-radius: 70px;
+  }
+
+  .gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.9s var(--ease);
+  }
+
+  .gallery-item:hover img {
+    transform: scale(1.06);
+  }
+
+  .gallery-cap {
+    position: absolute;
+    left: 14px;
+    bottom: 14px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(0, 34, 63, 0.75);
+    backdrop-filter: blur(6px);
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 500;
+  }
+
+  /* Clients */
+  .cf-head {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    align-items: end;
+    margin-bottom: 36px;
+  }
+
+  .cf-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+
+  .cf-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--navy);
+    font: inherit;
+    font-weight: 500;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition:
+      background 0.3s,
+      color 0.3s;
+  }
+
+  .cf-tab span {
+    font-size: 0.72rem;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--mist);
+  }
+
+  .cf-tab[aria-selected='true'] {
+    background: var(--grad);
+    border-color: transparent;
+    color: #fff;
+  }
+
+  .cf-tab[aria-selected='true'] span {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .cf-panel ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 10px;
+  }
+
+  .cf-panel li {
+    padding: 16px 20px;
+    border-radius: 14px;
+    background: var(--mist);
+    font-weight: 500;
+    color: var(--navy);
+    animation: pop-in 0.5s var(--ease) both;
+  }
+
+  .cf-panel li:nth-child(n) {
+    animation-delay: calc(var(--n, 0) * 30ms);
+  }
+
+  @keyframes pop-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+  }
+
+  @media (max-width: 900px) {
+    .profile-grid,
+    .vm-grid,
+    .story-grid,
+    .cf-head {
+      grid-template-columns: 1fr;
+    }
+
+    .gallery {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .story-logo {
+      max-width: 460px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .mission {
+      grid-template-columns: 1fr;
+    }
+
+    .tree-row {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    .tree-lines:not(.tree-lines--short) {
+      display: none;
+    }
+
+    .tree-node--root {
+      margin-bottom: 24px;
+    }
+
+    .tree-node {
+      min-width: 0;
+      width: 100%;
+    }
+  }
+</style>
+
+<script>
+  import { gsap, reducedMotion } from '../scripts/motion';
+
+  // Group tree: lines draw from the group down to BIG.
+  const group = document.querySelector<HTMLElement>('[data-group]');
+  if (group && !reducedMotion) {
+    gsap
+      .timeline({ scrollTrigger: { trigger: group.querySelector('.tree'), start: 'top 75%' } })
+      .from(group.querySelector('.tree-node--root'), { y: 30, opacity: 0, duration: 0.7, ease: 'power3.out' })
+      .fromTo(group.querySelectorAll('.tree-lines path'), { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.9, ease: 'power2.inOut', stagger: 0.25 })
+      .from(group.querySelectorAll('.tree-node:not(.tree-node--root)'), { y: 30, opacity: 0, duration: 0.7, stagger: 0.15, ease: 'power3.out' }, 0.6);
+  }
+
+  // Brand story: the logo assembles — red "B" bowl and navy parts slide together.
+  const story = document.querySelector<HTMLElement>('[data-story-logo]');
+  if (story && !reducedMotion) {
+    gsap
+      .timeline({ scrollTrigger: { trigger: story, start: 'top 75%' } })
+      .from(story.querySelector('.logo-red'), { x: -260, y: 160, opacity: 0, duration: 1.2, ease: 'expo.out' })
+      .from(story.querySelector('.logo-navy'), { x: 200, opacity: 0, duration: 1.2, ease: 'expo.out' }, 0.1)
+      .from(story.querySelector('.logo-text'), { y: 80, opacity: 0, duration: 0.9, ease: 'power3.out' }, 0.5);
+  }
+
+  // Accessible tabs for client categories.
+  const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-clients] [role="tab"]'));
+  const select = (tab: HTMLButtonElement) => {
+    tabs.forEach((t) => {
+      const on = t === tab;
+      t.setAttribute('aria-selected', String(on));
+      t.tabIndex = on ? 0 : -1;
+      const panel = document.getElementById(t.getAttribute('aria-controls')!)!;
+      panel.hidden = !on;
+      if (on) panel.querySelectorAll<HTMLElement>('li').forEach((li, i) => li.style.setProperty('--n', String(i)));
+    });
+  };
+  tabs.forEach((tab, i) => {
+    tab.addEventListener('click', () => select(tab));
+    tab.addEventListener('keydown', (e) => {
+      const dir = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+      if (!dir) return;
+      const next = tabs[(i + dir + tabs.length) % tabs.length];
+      select(next);
+      next.focus();
+    });
+  });
+</script>

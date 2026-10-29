@@ -1,0 +1,10 @@
+{
+  "name": "Let’z",
+  "category": "Makanan Ringan",
+  "principal": "",
+  "description": "Camilan aneka rasa dalam kemasan praktis untuk keluarga.",
+  "images": [
+    "/images/products/letz.webp"
+  ],
+  "order": 3
+}

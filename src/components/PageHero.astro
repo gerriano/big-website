@@ -1,0 +1,110 @@
+---
+interface Props {
+  eyebrow: string;
+  title: string;
+  lead?: string;
+  image?: string;
+}
+
+const { eyebrow, title, lead, image = '/images/photos/gudang-luas.webp' } = Astro.props;
+---
+
+<section class="phero on-dark" data-phero>
+  <div class="phero-panel" aria-hidden="true">
+    <img src={image} alt="" />
+  </div>
+  <svg class="phero-arrow" viewBox="0 0 100 40" preserveAspectRatio="xMaxYMax meet" aria-hidden="true">
+    <path d="M0 42L90 7" stroke="#fff" stroke-width="1.1" stroke-linecap="round" pathLength="1" class="phero-line"></path>
+    <path d="M87.2 4L95.6 4.8L90 11.1Z" fill="#fff" class="phero-head"></path>
+  </svg>
+  <div class="container phero-content">
+    <p class="eyebrow phero-fade">{eyebrow}</p>
+    <h1 class="display phero-title" data-split="load">{title}</h1>
+    {lead && <p class="lead phero-fade">{lead}</p>}
+  </div>
+</section>
+
+<style>
+  .phero {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    min-height: min(78svh, 720px);
+    display: flex;
+    align-items: flex-end;
+    padding: calc(var(--header-h) + 64px) 0 clamp(56px, 7vw, 96px);
+    background: radial-gradient(110% 100% at 0% 100%, var(--navy-700), var(--navy) 45%, var(--navy-900));
+    color: #fff;
+  }
+
+  .phero-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 56%;
+    height: 82%;
+    z-index: -1;
+    clip-path: polygon(14% 0, 100% 0, 100% 46%, 0 100%, 0 0);
+    background: var(--grad);
+  }
+
+  .phero-panel img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    mix-blend-mode: multiply;
+    opacity: 0.85;
+  }
+
+  .phero-arrow {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 52%;
+    height: 60%;
+    z-index: -1;
+    overflow: visible;
+  }
+
+  .phero-title {
+    font-size: clamp(2.6rem, 8vw, 6.4rem);
+    max-width: 10em;
+    margin-bottom: 20px;
+  }
+
+  .phero .lead {
+    max-width: 52ch;
+  }
+
+  @media (max-width: 760px) {
+    .phero {
+      min-height: 0;
+      padding-top: calc(var(--header-h) + 200px);
+    }
+
+    .phero-panel {
+      width: 100%;
+      height: 260px;
+      clip-path: polygon(0 0, 100% 0, 100% 55%, 0 100%);
+    }
+
+    .phero-arrow {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  import { gsap, reducedMotion } from '../scripts/motion';
+
+  const hero = document.querySelector<HTMLElement>('[data-phero]');
+  if (hero && !reducedMotion) {
+    gsap
+      .timeline({ defaults: { ease: 'expo.out' } })
+      .from(hero.querySelector('.phero-panel'), { xPercent: 12, yPercent: -10, opacity: 0, duration: 1.5 })
+      .from(hero.querySelector('.phero-panel img'), { scale: 1.25, duration: 2 }, 0)
+      .fromTo(hero.querySelector('.phero-line'), { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.3, ease: 'power3.inOut' }, 0.3)
+      .from(hero.querySelector('.phero-head'), { scale: 0, transformOrigin: '50% 50%', duration: 0.7, ease: 'back.out(2.4)' }, 1.3)
+      .from(hero.querySelectorAll('.phero-fade'), { y: 24, opacity: 0, duration: 1, stagger: 0.1 }, 0.5);
+  }
+</script>

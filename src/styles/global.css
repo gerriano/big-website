@@ -1,0 +1,354 @@
+@import '@fontsource/libre-franklin/700.css';
+@import '@fontsource/libre-franklin/800.css';
+@import '@fontsource/libre-franklin/900.css';
+@import '@fontsource/poppins/400.css';
+@import '@fontsource/poppins/500.css';
+@import '@fontsource/poppins/600.css';
+
+/* Brand tokens — BIG Logo Playbook 2026 */
+:root {
+  --navy: #003665;
+  --navy-950: #001a33;
+  --navy-900: #00223f;
+  --navy-800: #002b52;
+  --navy-700: #0a4378;
+  --red: #e10600;
+  --grad-start: #e61e25;
+  --grad-end: #b50346;
+  --grad: linear-gradient(120deg, var(--grad-start), var(--grad-end));
+  --ink: #0b1d33;
+  --muted: #55657a;
+  --paper: #ffffff;
+  --mist: #f3f6fa;
+  --line: rgba(0, 54, 101, 0.12);
+  --line-light: rgba(255, 255, 255, 0.14);
+
+  --font-display: 'Libre Franklin', 'Franklin Gothic Heavy', 'Arial Black', sans-serif;
+  --font-body: 'Poppins', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --gutter: clamp(16px, 4vw, 48px);
+  --max: 1240px;
+  --radius: 22px;
+  --radius-lg: 36px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --header-h: 76px;
+
+  color-scheme: light;
+}
+
+@view-transition {
+  navigation: auto;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: calc(var(--header-h) + 16px);
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+img {
+  height: auto;
+}
+
+a {
+  color: inherit;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 900;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  margin: 0;
+  text-wrap: balance;
+}
+
+p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+:focus-visible {
+  outline: 3px solid var(--grad-start);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -60px;
+  z-index: 100;
+  background: var(--navy);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 10px;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: 12px;
+}
+
+/* Layout */
+.container {
+  width: 100%;
+  max-width: calc(var(--max) + var(--gutter) * 2);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.section {
+  padding-block: clamp(72px, 10vw, 140px);
+  position: relative;
+}
+
+.section--navy {
+  background: var(--navy);
+  color: #fff;
+}
+
+.section--mist {
+  background: var(--mist);
+}
+
+/* Type */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--grad-start);
+  margin-bottom: 18px;
+}
+
+.eyebrow::before {
+  content: '';
+  width: 28px;
+  height: 3px;
+  border-radius: 3px;
+  background: var(--grad);
+}
+
+.section--navy .eyebrow,
+.on-dark .eyebrow {
+  color: #ff6b6f;
+}
+
+.display {
+  font-size: clamp(2.6rem, 7.2vw, 6.2rem);
+  text-transform: uppercase;
+  letter-spacing: -0.025em;
+  line-height: 0.92;
+}
+
+.h2 {
+  font-size: clamp(2rem, 4.6vw, 3.6rem);
+}
+
+.h3 {
+  font-size: clamp(1.25rem, 2vw, 1.6rem);
+  letter-spacing: -0.01em;
+}
+
+.lead {
+  font-size: clamp(1.02rem, 1.4vw, 1.2rem);
+  color: var(--muted);
+  max-width: 62ch;
+}
+
+.section--navy .lead,
+.on-dark .lead {
+  color: rgba(255, 255, 255, 0.76);
+}
+
+.text-grad {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Buttons */
+.btn {
+  --btn-bg: var(--grad);
+  --btn-fg: #fff;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 52px;
+  padding: 0 26px;
+  border-radius: 999px;
+  border: 0;
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.98rem;
+  text-decoration: none;
+  cursor: pointer;
+  overflow: hidden;
+  isolation: isolate;
+  transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
+  box-shadow: 0 10px 30px -12px rgba(181, 3, 70, 0.6);
+}
+
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--navy);
+  transform: translateX(-101%) skewX(-20deg);
+  transform-origin: left;
+  transition: transform 0.5s var(--ease);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn:hover::after {
+  transform: translateX(0) skewX(0);
+}
+
+.btn .arrow {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.4s var(--ease);
+}
+
+.btn:hover .arrow {
+  transform: translate(3px, -3px);
+}
+
+.btn--ghost {
+  --btn-bg: transparent;
+  --btn-fg: currentColor;
+  box-shadow: inset 0 0 0 2px currentColor;
+}
+
+.btn--ghost::after {
+  background: currentColor;
+  opacity: 0.12;
+}
+
+.btn--light {
+  --btn-bg: #fff;
+  --btn-fg: var(--navy);
+  box-shadow: 0 10px 30px -14px rgba(0, 0, 0, 0.5);
+}
+
+.btn--light::after {
+  background: var(--mist);
+}
+
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+/* Diagonal brand motif */
+.slash {
+  position: absolute;
+  pointer-events: none;
+}
+
+/* Cards */
+.card {
+  background: #fff;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+}
+
+/* Reveal defaults (JS adds .is-in; without JS everything stays visible) */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+.js [data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
+  transition-delay: var(--delay, 0s);
+}
+
+.split-word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.06em;
+  margin-bottom: -0.06em;
+}
+
+.split-word > span {
+  display: inline-block;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .js [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+}

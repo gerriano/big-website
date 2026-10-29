@@ -1,0 +1,348 @@
+---
+import Arrow from '../Arrow.astro';
+import { home, site } from '../../data/content';
+
+const { hero } = home;
+---
+
+<section class="hero on-dark" data-hero>
+  <canvas class="hero-net" data-hero-net aria-hidden="true"></canvas>
+
+  <div class="hero-visual" data-hero-visual aria-hidden="true">
+    <svg viewBox="0 0 120 100" class="hero-svg">
+      <defs>
+        <clipPath id="hero-panel-clip">
+          <path d="M14 0H120V47L27 84.5C20.5 87.2 14 84 14 76Z"></path>
+        </clipPath>
+        <linearGradient id="hero-grad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#e61e25"></stop>
+          <stop offset="1" stop-color="#b50346"></stop>
+        </linearGradient>
+        <linearGradient id="hero-fade" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#00223f" stop-opacity="0"></stop>
+          <stop offset="1" stop-color="#00223f" stop-opacity="0.9"></stop>
+        </linearGradient>
+      </defs>
+
+      <polygon class="hero-under" points="40,100 120,64 120,100" fill="#002b52"></polygon>
+
+      <g clip-path="url(#hero-panel-clip)" class="hero-panel" data-hero-panel>
+        <rect x="14" y="0" width="106" height="90" fill="url(#hero-grad)"></rect>
+        <image
+          class="hero-photo"
+          data-hero-photo
+          href="/images/photos/forklift-rak.webp"
+          x="14"
+          y="-6"
+          width="106"
+          height="96"
+          preserveAspectRatio="xMidYMid slice"></image>
+        <rect x="14" y="0" width="106" height="90" fill="url(#hero-grad)" class="hero-tint"></rect>
+      </g>
+
+      <g class="hero-arrow" data-hero-arrow>
+        <path
+          class="hero-arrow-line"
+          d="M22 92.1L111 54.3"
+          pathLength="1"
+          stroke="#fff"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          fill="none"></path>
+        <path class="hero-arrow-head" d="M108.2 50.1L117.5 51.6L112 59.3Z" fill="#fff"></path>
+      </g>
+    </svg>
+  </div>
+
+  <div class="container hero-content">
+    <p class="eyebrow hero-fade">{hero.eyebrow}</p>
+    <h1 class="display hero-title" data-split="load">{hero.title}</h1>
+    <p class="lead hero-sub hero-fade">{hero.subtitle}</p>
+    <div class="btn-row hero-fade">
+      <a href={hero.primaryCta.href} class="btn">
+        {hero.primaryCta.label}
+        <Arrow />
+      </a>
+      <a href={hero.secondaryCta.href} class="btn btn--ghost">{hero.secondaryCta.label}</a>
+    </div>
+  </div>
+
+  <div class="container hero-foot hero-fade">
+    <span class="hero-scroll" aria-hidden="true"><span></span></span>
+    <p>Bagian dari <strong>{site.groupName}</strong></p>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    background: radial-gradient(120% 90% at 0% 100%, var(--navy-700) 0%, var(--navy) 40%, var(--navy-900) 100%);
+    color: #fff;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .hero-net {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+  }
+
+  .hero-visual {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: min(64vw, 1100px);
+    aspect-ratio: 1.2;
+    z-index: -1;
+  }
+
+  .hero-svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .hero-photo {
+    transform-origin: 70% 30%;
+  }
+
+  .hero-tint {
+    mix-blend-mode: multiply;
+    opacity: 0.72;
+  }
+
+  .hero-content {
+    position: relative;
+    padding-top: calc(var(--header-h) + 48px);
+  }
+
+  .hero-title {
+    max-width: 9.5em;
+    margin-bottom: 26px;
+    text-shadow: 0 2px 40px rgba(0, 26, 51, 0.35);
+  }
+
+  .hero-sub {
+    max-width: 46ch;
+    margin-bottom: 34px;
+  }
+
+  .hero-foot {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding-block: 48px 92px;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .hero-foot strong {
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .hero-scroll {
+    position: relative;
+    width: 26px;
+    height: 42px;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 14px;
+  }
+
+  .hero-scroll span {
+    position: absolute;
+    left: 50%;
+    top: 7px;
+    width: 4px;
+    height: 8px;
+    margin-left: -2px;
+    border-radius: 2px;
+    background: #fff;
+    animation: scroll-dot 1.8s var(--ease) infinite;
+  }
+
+  @keyframes scroll-dot {
+    0% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    70% {
+      transform: translateY(14px);
+      opacity: 0;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .hero {
+      justify-content: flex-start;
+    }
+
+    .hero-visual {
+      position: relative;
+      width: 128vw;
+      margin: 0 -10vw 0 auto;
+      margin-top: calc(var(--header-h) - 8px);
+    }
+
+    .hero-content {
+      padding-top: 0;
+      margin-top: -3vw;
+    }
+
+    .hero-foot {
+      padding-block: 36px 84px;
+    }
+  }
+</style>
+
+<script>
+  import { gsap, reducedMotion } from '../../scripts/motion';
+
+  const hero = document.querySelector<HTMLElement>('[data-hero]')!;
+  const visual = hero.querySelector<HTMLElement>('[data-hero-visual]')!;
+  const canvas = hero.querySelector<HTMLCanvasElement>('[data-hero-net]')!;
+
+  // Entrance timeline: panel slides in along the brand diagonal, then the arrow fires.
+  if (!reducedMotion) {
+    const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
+    tl.from('[data-hero-panel]', { x: -18, y: 9, opacity: 0, duration: 1.6 })
+      .from('[data-hero-photo]', { scale: 1.3, duration: 2.2 }, 0)
+      .from('.hero-under', { opacity: 0, x: 20, duration: 1.4 }, 0.2)
+      .fromTo('.hero-arrow-line', { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.4, ease: 'power3.inOut' }, 0.35)
+      .from('.hero-arrow-head', { scale: 0, transformOrigin: '60% 50%', duration: 0.8, ease: 'back.out(2.2)' }, 1.45)
+      .from('.hero-fade', { y: 30, opacity: 0, duration: 1.1, stagger: 0.1 }, 0.7);
+
+    // Scroll: the visual drifts up-right, as if the arrow keeps moving forward.
+    gsap.to(visual, {
+      xPercent: 6,
+      yPercent: -14,
+      ease: 'none',
+      scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true },
+    });
+
+    // Pointer parallax on fine pointers only.
+    if (window.matchMedia('(pointer: fine)').matches) {
+      const panelX = gsap.quickTo('[data-hero-panel]', 'x', { duration: 1.2, ease: 'power3.out' });
+      const panelY = gsap.quickTo('[data-hero-panel]', 'y', { duration: 1.2, ease: 'power3.out' });
+      const arrowX = gsap.quickTo('[data-hero-arrow]', 'x', { duration: 1.2, ease: 'power3.out' });
+      const arrowY = gsap.quickTo('[data-hero-arrow]', 'y', { duration: 1.2, ease: 'power3.out' });
+      hero.addEventListener('pointermove', (e) => {
+        const nx = e.clientX / window.innerWidth - 0.5;
+        const ny = e.clientY / window.innerHeight - 0.5;
+        panelX(nx * -1.6);
+        panelY(ny * -1.6);
+        arrowX(nx * 2.6);
+        arrowY(ny * 2.6);
+      });
+    }
+  }
+
+  // Network canvas: nodes drift along the brand's forward diagonal and link up when close.
+  const ctx = canvas.getContext('2d');
+  if (ctx) {
+    type Node = { x: number; y: number; v: number; r: number; hot: boolean };
+    let w = 0;
+    let h = 0;
+    let nodes: Node[] = [];
+    const pointer = { x: -9999, y: -9999 };
+    const dir = { x: Math.cos(-0.4), y: Math.sin(-0.4) };
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    const resize = () => {
+      w = canvas.clientWidth;
+      h = canvas.clientHeight;
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const count = Math.round(Math.min(90, (w * h) / 16000));
+      nodes = Array.from({ length: count }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        v: 0.15 + Math.random() * 0.45,
+        r: Math.random() < 0.12 ? 2.4 : 1.4,
+        hot: Math.random() < 0.12,
+      }));
+    };
+
+    const draw = () => {
+      ctx.clearRect(0, 0, w, h);
+      for (const n of nodes) {
+        if (!reducedMotion) {
+          n.x += dir.x * n.v;
+          n.y += dir.y * n.v;
+        }
+        const dx = n.x - pointer.x;
+        const dy = n.y - pointer.y;
+        const d2 = dx * dx + dy * dy;
+        if (d2 < 14000) {
+          const f = (14000 - d2) / 14000;
+          n.x += (dx / Math.sqrt(d2 + 1)) * f * 2;
+          n.y += (dy / Math.sqrt(d2 + 1)) * f * 2;
+        }
+        if (n.x > w + 20) n.x = -20;
+        if (n.y < -20) n.y = h + 20;
+        if (n.x < -20) n.x = w + 20;
+        if (n.y > h + 20) n.y = -20;
+      }
+      for (let i = 0; i < nodes.length; i++) {
+        const a = nodes[i];
+        for (let j = i + 1; j < nodes.length; j++) {
+          const b = nodes[j];
+          const dx = a.x - b.x;
+          const dy = a.y - b.y;
+          const d2 = dx * dx + dy * dy;
+          if (d2 > 17000) continue;
+          ctx.strokeStyle = `rgba(255,255,255,${0.16 * (1 - d2 / 17000)})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.stroke();
+        }
+      }
+      for (const n of nodes) {
+        ctx.fillStyle = n.hot ? '#ff4b52' : 'rgba(255,255,255,0.55)';
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    };
+
+    let running = false;
+    const loop = () => {
+      if (!running) return;
+      draw();
+      requestAnimationFrame(loop);
+    };
+
+    resize();
+    draw();
+    window.addEventListener('resize', resize);
+    hero.addEventListener('pointermove', (e) => {
+      const r = canvas.getBoundingClientRect();
+      pointer.x = e.clientX - r.left;
+      pointer.y = e.clientY - r.top;
+    });
+    hero.addEventListener('pointerleave', () => {
+      pointer.x = pointer.y = -9999;
+    });
+
+    if (!reducedMotion) {
+      new IntersectionObserver(([entry]) => {
+        const wasRunning = running;
+        running = entry.isIntersecting && !document.hidden;
+        if (running && !wasRunning) loop();
+      }).observe(canvas);
+    }
+  }
+</script>

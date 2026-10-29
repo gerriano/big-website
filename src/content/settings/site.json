@@ -1,0 +1,32 @@
+{
+  "companyName": "PT Bhineka Inovasi Global",
+  "shortName": "BIG",
+  "tagline": "Satu Jaringan, Ribuan Kebutuhan",
+  "description": "Perusahaan distribusi produk konsumen & industri dengan jaringan luas untuk kebutuhan pasar ritel modern dan tradisional di Indonesia.",
+  "email": "info@bhineka.global",
+  "groupName": "Mikatasa Group",
+  "parentCompany": "PT Atlantic Biruraya",
+  "offices": [
+    {
+      "label": "Head Office",
+      "city": "Jakarta",
+      "address": "KO Taman Kebon Jeruk AA 3/22, Kel. Meruya Selatan, Kec. Kembangan, Kota Adm. Jakarta Barat, DKI Jakarta 11650",
+      "phone": "021-5845785",
+      "mapQuery": "Taman Kebon Jeruk Blok AA3 No.22, Meruya Selatan, Kembangan, Jakarta Barat"
+    },
+    {
+      "label": "Branch Office",
+      "city": "Surabaya",
+      "address": "Rungkut Industri II No. 5-7, Surabaya, Jawa Timur",
+      "phone": "031-8495888",
+      "mapQuery": "Jl. Rungkut Industri II No.5-7, Surabaya"
+    }
+  ],
+  "inquiryCategories": [
+    "Kemitraan Prinsipal",
+    "Kemitraan Outlet",
+    "Pemesanan Produk",
+    "Karier",
+    "Lainnya"
+  ]
+}

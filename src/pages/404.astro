@@ -1,0 +1,15 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Arrow from '../components/Arrow.astro';
+---
+
+<Base title="Halaman tidak ditemukan">
+  <PageHero eyebrow="404" title="Halaman tidak ditemukan" lead="Halaman yang Anda cari mungkin sudah dipindahkan atau tidak tersedia." />
+  <section class="section">
+    <div class="container btn-row">
+      <a href="/" class="btn">Kembali ke Beranda <Arrow /></a>
+      <a href="/kontak" class="btn btn--ghost" style="color: var(--navy)">Hubungi Kami</a>
+    </div>
+  </section>
+</Base>

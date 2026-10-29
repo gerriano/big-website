@@ -1,0 +1,449 @@
+---
+import map from '../data/indonesia-map.json';
+import { home, regions } from '../data/content';
+
+interface Props {
+  heading?: string;
+  text?: string;
+}
+
+const { heading = home.distribution.heading, text = home.distribution.text } = Astro.props;
+
+type Point = [number, number];
+const anchors = map.anchors as unknown as Record<string, Point>;
+const hubs = map.hubs as unknown as Record<string, Point>;
+const covered = new Set<string>(regions.map((r) => r.id));
+
+// Each region is reached from the closest office; curves bow upward for a "network" feel.
+const routes = regions
+  .filter((r) => r.id !== 'jawa')
+  .map((r) => {
+    const to = anchors[r.id];
+    const fromKey = to[0] < hubs.surabaya[0] - 60 ? 'jakarta' : 'surabaya';
+    const from = hubs[fromKey];
+    const mx = (from[0] + to[0]) / 2;
+    const my = Math.min(from[1], to[1]) - Math.abs(to[0] - from[0]) * 0.18 - 20;
+    return { id: r.id, d: `M${from[0]} ${from[1]}Q${mx.toFixed(1)} ${my.toFixed(1)} ${to[0]} ${to[1]}` };
+  });
+const hubLink = `M${hubs.jakarta[0]} ${hubs.jakarta[1]}Q${(hubs.jakarta[0] + hubs.surabaya[0]) / 2} ${hubs.jakarta[1] + 26} ${hubs.surabaya[0]} ${hubs.surabaya[1]}`;
+---
+
+<section class="section section--navy dmap" data-dmap>
+  <div class="dmap-glow" aria-hidden="true"></div>
+  <div class="container">
+    <div class="dmap-head">
+      <div>
+        <p class="eyebrow">{home.distribution.eyebrow}</p>
+        <h2 class="h2" data-split>{heading}</h2>
+      </div>
+      <p class="lead" data-reveal>{text}</p>
+    </div>
+
+    <div class="dmap-stage">
+      <svg
+        class="dmap-svg"
+        viewBox={`0 0 ${map.width} ${map.height}`}
+        role="img"
+        aria-label={`Peta area distribusi BIG: ${regions.map((r) => r.name).join(', ')}`}
+      >
+        <defs>
+          <linearGradient id="dmap-grad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#e61e25"></stop>
+            <stop offset="1" stop-color="#b50346"></stop>
+          </linearGradient>
+          <radialGradient id="dmap-pulse">
+            <stop offset="0" stop-color="#ff4b52" stop-opacity="0.9"></stop>
+            <stop offset="1" stop-color="#ff4b52" stop-opacity="0"></stop>
+          </radialGradient>
+        </defs>
+
+        <g class="dmap-regions">
+          {
+            Object.entries(map.regions).map(([id, d]) => (
+              <path
+                d={d}
+                class:list={['region', { 'is-covered': covered.has(id) }]}
+                data-region={covered.has(id) ? id : undefined}
+              />
+            ))
+          }
+        </g>
+
+        <g class="dmap-routes" fill="none">
+          <path d={hubLink} class="route route--hub" pathLength="1"></path>
+          {routes.map((r) => <path d={r.d} class="route" data-route={r.id} pathLength="1" />)}
+        </g>
+
+        <g class="dmap-travellers">
+          {routes.map((r) => <circle r="3" class="traveller" data-traveller={r.id} />)}
+        </g>
+
+        <g class="dmap-anchors">
+          {
+            regions.map((r) => {
+              const [x, y] = anchors[r.id];
+              return (
+                <g class="anchor" data-anchor={r.id} transform={`translate(${x} ${y})`}>
+                  <circle r="4.5" class="anchor-dot" />
+                  <text y="-12" text-anchor="middle" class="anchor-label">
+                    {r.name}
+                  </text>
+                </g>
+              );
+            })
+          }
+        </g>
+
+        <g class="dmap-hubs">
+          {
+            Object.values(hubs).map(([x, y]) => (
+              <g class="hub" transform={`translate(${x} ${y})`}>
+                <circle r="22" fill="url(#dmap-pulse)" class="hub-pulse" />
+                <circle r="6.5" class="hub-dot" />
+              </g>
+            ))
+          }
+        </g>
+      </svg>
+
+      <div class="dmap-legend">
+        <span><i class="lg lg--hub"></i> Kantor (Jakarta & Surabaya)</span>
+        <span><i class="lg lg--area"></i> Area distribusi</span>
+      </div>
+    </div>
+
+    <ul class="dmap-list" aria-label="Wilayah distribusi">
+      {
+        regions.map((r, i) => (
+          <li>
+            <button type="button" data-region-btn={r.id}>
+              <span class="num">0{i + 1}</span>
+              {r.name}
+            </button>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .dmap {
+    overflow: hidden;
+    background: linear-gradient(180deg, var(--navy) 0%, var(--navy-900) 100%);
+  }
+
+  .dmap-glow {
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    width: 900px;
+    height: 600px;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(closest-side, rgba(10, 67, 120, 0.9), transparent);
+    pointer-events: none;
+  }
+
+  .dmap .container {
+    position: relative;
+  }
+
+  .dmap-head {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 40px;
+    align-items: end;
+    margin-bottom: clamp(32px, 5vw, 64px);
+  }
+
+  .dmap-stage {
+    position: relative;
+  }
+
+  .dmap-svg {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .region {
+    fill: rgba(255, 255, 255, 0.05);
+    stroke: rgba(255, 255, 255, 0.08);
+    stroke-width: 0.6;
+    transition: fill 0.5s var(--ease);
+  }
+
+  .region.is-covered {
+    fill: #2867a8;
+    stroke: rgba(255, 255, 255, 0.35);
+    cursor: pointer;
+  }
+
+  .region.is-active {
+    fill: url(#dmap-grad);
+  }
+
+  .route {
+    stroke: rgba(255, 255, 255, 0.45);
+    stroke-width: 1.4;
+    stroke-dasharray: 0.012 0.008;
+    transition: stroke 0.4s;
+  }
+
+  .route--hub {
+    stroke: #ff4b52;
+    stroke-dasharray: none;
+    stroke-width: 2;
+  }
+
+  .route.is-active {
+    stroke: #fff;
+    stroke-width: 2;
+  }
+
+  .traveller {
+    fill: #fff;
+    filter: drop-shadow(0 0 4px #ff4b52);
+  }
+
+  .anchor-dot {
+    fill: #fff;
+    stroke: var(--navy);
+    stroke-width: 2;
+  }
+
+  .anchor-label {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 15px;
+    fill: #fff;
+    paint-order: stroke;
+    stroke: var(--navy-900);
+    stroke-width: 4px;
+    stroke-linejoin: round;
+    pointer-events: none;
+  }
+
+  .hub-dot {
+    fill: #ff4b52;
+    stroke: #fff;
+    stroke-width: 2.5;
+  }
+
+  .hub-pulse {
+    transform-origin: center;
+    transform-box: fill-box;
+    animation: hub-pulse 2.4s ease-out infinite;
+  }
+
+  @keyframes hub-pulse {
+    from {
+      transform: scale(0.4);
+      opacity: 1;
+    }
+    to {
+      transform: scale(1.6);
+      opacity: 0;
+    }
+  }
+
+  .dmap-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 22px;
+    margin-top: 18px;
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .lg {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: -1px;
+  }
+
+  .lg--hub {
+    background: #ff4b52;
+    box-shadow: 0 0 0 2px #fff;
+  }
+
+  .lg--area {
+    background: #2867a8;
+    border-radius: 3px;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.4);
+  }
+
+  .dmap-list {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+    margin-top: clamp(32px, 4vw, 48px);
+  }
+
+  .dmap-list button {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 16px 18px;
+    border-radius: 16px;
+    border: 1px solid var(--line-light);
+    background: rgba(255, 255, 255, 0.03);
+    color: #fff;
+    font: inherit;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.05rem;
+    text-align: left;
+    cursor: pointer;
+    transition:
+      background 0.4s var(--ease),
+      border-color 0.4s,
+      transform 0.4s var(--ease);
+  }
+
+  .dmap-list .num {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .dmap-list button.is-active,
+  .dmap-list button:hover {
+    background: var(--grad);
+    border-color: transparent;
+    transform: translateY(-3px);
+  }
+
+  .dmap-list button.is-active .num,
+  .dmap-list button:hover .num {
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  @media (max-width: 900px) {
+    .dmap-head {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .dmap-list {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .anchor-label {
+      font-size: 18px;
+      stroke-width: 5px;
+    }
+
+    .dmap-stage {
+      margin-inline: calc(var(--gutter) * -1);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .dmap-stage::-webkit-scrollbar {
+      display: none;
+    }
+
+    .dmap-svg {
+      width: 900px;
+      max-width: none;
+      padding-inline: var(--gutter);
+    }
+
+    .dmap-legend::after {
+      content: '← Geser peta →';
+      margin-left: auto;
+    }
+
+    .dmap-legend {
+      position: sticky;
+      left: 0;
+      width: 100vw;
+      padding-inline: var(--gutter);
+    }
+  }
+
+  @media (max-width: 420px) {
+    .dmap-list {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>
+
+<script>
+  import { gsap, reducedMotion } from '../scripts/motion';
+  import { MotionPathPlugin } from 'gsap/MotionPathPlugin';
+
+  gsap.registerPlugin(MotionPathPlugin);
+
+  document.querySelectorAll<HTMLElement>('[data-dmap]').forEach((section) => {
+    const q = <T extends Element>(s: string) => Array.from(section.querySelectorAll<T>(s));
+    const regionPaths = q<SVGPathElement>('[data-region]');
+    const routes = q<SVGPathElement>('[data-route]');
+    const buttons = q<HTMLButtonElement>('[data-region-btn]');
+    const travellers = q<SVGCircleElement>('[data-traveller]');
+
+    // Hover / tap to highlight a region, its route and its button.
+    let pinned: string | null = null;
+    const setActive = (id: string | null) => {
+      regionPaths.forEach((p) => p.classList.toggle('is-active', p.dataset.region === id));
+      routes.forEach((r) => r.classList.toggle('is-active', r.dataset.route === id));
+      buttons.forEach((b) => {
+        b.classList.toggle('is-active', b.dataset.regionBtn === id);
+        b.setAttribute('aria-pressed', String(b.dataset.regionBtn === id));
+      });
+    };
+    const bind = (el: Element, id: string) => {
+      el.addEventListener('pointerenter', () => setActive(id));
+      el.addEventListener('pointerleave', () => setActive(pinned));
+      el.addEventListener('click', () => {
+        pinned = pinned === id ? null : id;
+        setActive(pinned);
+      });
+    };
+    regionPaths.forEach((p) => bind(p, p.dataset.region!));
+    buttons.forEach((b) => bind(b, b.dataset.regionBtn!));
+
+    const stage = section.querySelector<HTMLElement>('.dmap-stage')!;
+    if (stage.scrollWidth > stage.clientWidth) stage.scrollLeft = (stage.scrollWidth - stage.clientWidth) * 0.3;
+
+    if (reducedMotion) {
+      travellers.forEach((t) => t.remove());
+      return;
+    }
+
+    // Scroll-in: islands surface, routes draw from the offices, anchors pop.
+    const tl = gsap.timeline({ scrollTrigger: { trigger: section.querySelector('.dmap-stage'), start: 'top 75%' } });
+    tl.from(q('.region'), { opacity: 0, duration: 0.9, stagger: 0.07, ease: 'power3.out' })
+      .from(q('.hub'), { scale: 0, transformOrigin: 'center', duration: 0.6, ease: 'back.out(2.4)' }, 0.4)
+      .fromTo(
+        q('.route'),
+        { strokeDashoffset: 1, strokeDasharray: '1 1' },
+        { strokeDashoffset: 0, duration: 1.2, stagger: 0.12, ease: 'power2.inOut' },
+        0.6,
+      )
+      .set(q('.route:not(.route--hub)'), { clearProps: 'strokeDasharray,strokeDashoffset' })
+      .from(q('.anchor'), { opacity: 0, scale: 0.4, transformOrigin: 'center', duration: 0.6, stagger: 0.08, ease: 'back.out(2)' }, 1.2);
+
+    // Little parcels travelling continuously along every route.
+    travellers.forEach((t, i) => {
+      const route = section.querySelector<SVGPathElement>(`[data-route="${t.dataset.traveller}"]`)!;
+      gsap.set(t, { opacity: 0 });
+      gsap.to(t, {
+        motionPath: { path: route, align: route, alignOrigin: [0.5, 0.5] },
+        opacity: 1,
+        duration: 2.6 + (i % 3) * 0.5,
+        ease: 'none',
+        repeat: -1,
+        delay: 2 + i * 0.35,
+        repeatDelay: 0.6,
+      });
+    });
+  });
+</script>

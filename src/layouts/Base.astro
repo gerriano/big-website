@@ -1,0 +1,74 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/content';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Whether the page opens with a dark hero (header starts with white logo). */
+  darkHero?: boolean;
+  image?: string;
+}
+
+const { title, description = site.description, darkHero = true, image = '/og-image.jpg' } = Astro.props;
+const fullTitle = title ? `${title} — ${site.companyName}` : `${site.companyName} — ${site.tagline}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.png" type="image/png" sizes="64x64" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#003665" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="id_ID" />
+    <meta property="og:site_name" content={site.companyName} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL(image, Astro.site)} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        name: site.companyName,
+        url: Astro.site?.toString(),
+        email: site.email,
+        logo: new URL('/apple-touch-icon.png', Astro.site).toString(),
+        parentOrganization: { '@type': 'Organization', name: site.parentCompany },
+        address: site.offices.map((o) => ({
+          '@type': 'PostalAddress',
+          streetAddress: o.address,
+          addressLocality: o.city,
+          addressCountry: 'ID',
+        })),
+        telephone: site.offices[0]?.phone,
+      })}
+    />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Langsung ke konten</a>
+    <Header overDark={darkHero} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <script>
+      import '../scripts/motion';
+    </script>
+  </body>
+</html>

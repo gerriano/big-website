@@ -1,0 +1,41 @@
+{
+  "hero": {
+    "eyebrow": "Distributor Produk Konsumen & Industri",
+    "title": "Satu Jaringan, Ribuan Kebutuhan",
+    "subtitle": "Kami menyalurkan produk berkualitas dari prinsipal terpercaya ke pasar ritel modern, tradisional, horeca, hingga institusi — dari Sumatera sampai Papua.",
+    "primaryCta": { "label": "Jadi Mitra Kami", "href": "/kontak" },
+    "secondaryCta": { "label": "Lihat Brand", "href": "/brand" }
+  },
+  "intro": {
+    "eyebrow": "Tentang BIG",
+    "heading": "Bukan distributor pasif. Mesin pertumbuhan untuk brand Anda.",
+    "text": "PT Bhineka Inovasi Global hadir sebagai distributor consumer goods yang membantu mitra bisnis melakukan diferensiasi produk. Mitra kami tidak hanya mendapatkan produk yang berkualitas, tetapi juga dukungan sistem yang efisien, layanan yang cepat tanggap, serta solusi dalam berbagai situasi.",
+    "pillars": [
+      { "title": "Sistem yang Efisien", "text": "Infrastruktur, sistem logistik, dan mitra operasional yang terintegrasi untuk penyaluran yang lancar." },
+      { "title": "Layanan Cepat Tanggap", "text": "Pengiriman yang cepat, tepat, dan andal — konsisten dan tepat waktu." },
+      { "title": "Kemitraan Jangka Panjang", "text": "Solutif di berbagai situasi, membangun hubungan yang saling menguntungkan." }
+    ]
+  },
+  "distribution": {
+    "eyebrow": "Area Distribusi",
+    "heading": "Menjangkau enam wilayah utama Indonesia",
+    "text": "Jaringan distribusi adalah fondasi utama kami. Dengan dukungan infrastruktur, sistem logistik, dan mitra operasional yang terintegrasi, kami menjangkau berbagai kanal ritel secara efektif dan berkesinambungan."
+  },
+  "channels": {
+    "eyebrow": "Kanal Pasar",
+    "heading": "Berpengalaman di setiap kanal",
+    "items": [
+      { "title": "Ritel Modern", "text": "Minimarket, supermarket, dan jaringan ritel modern." },
+      { "title": "Pasar Tradisional", "text": "Toko kelontong, grosir, dan pasar tradisional." },
+      { "title": "Horeca", "text": "Hotel, restoran, kafe, dan klub." },
+      { "title": "E-Commerce", "text": "Penjualan melalui kanal digital dan marketplace." },
+      { "title": "Institusi", "text": "Perkantoran, rumah sakit, bank, sekolah, dan apartemen." }
+    ]
+  },
+  "cta": {
+    "heading": "Siap bergerak maju bersama BIG?",
+    "text": "Baik Anda prinsipal yang ingin memperluas jangkauan maupun outlet yang mencari pasokan andal — mari bicara.",
+    "primaryCta": { "label": "Ajukan Kemitraan", "href": "/kontak" },
+    "secondaryCta": { "label": "Pelajari Tentang Kami", "href": "/tentang-kami" }
+  }
+}

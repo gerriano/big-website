@@ -1,0 +1,151 @@
+---
+import { home } from '../../data/content';
+
+const { channels } = home;
+const icons: Record<string, string> = {
+  'Ritel Modern': 'M4 9h16l-1.5 10.5a1.5 1.5 0 0 1-1.5 1.5H7a1.5 1.5 0 0 1-1.5-1.5L4 9Zm4 0V7a4 4 0 1 1 8 0v2',
+  'Pasar Tradisional': 'M3 10l2-6h14l2 6M3 10h18M3 10a3 3 0 0 0 6 0m0 0a3 3 0 0 0 6 0m0 0a3 3 0 0 0 6 0M5 13v7h14v-7M10 20v-4h4v4',
+  Horeca: 'M4 15h16M5 15a7 7 0 0 1 14 0M12 6V4M3 19h18',
+  'E-Commerce': 'M8 3h8a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm3 15h2M9 9l2 2 4-4',
+  Institusi: 'M3 21h18M5 21V10l7-5 7 5v11M9 21v-5h6v5M9 12h.01M15 12h.01',
+};
+---
+
+<section class="section section--mist channels">
+  <div class="container channels-grid">
+    <div class="channels-intro">
+      <p class="eyebrow">{channels.eyebrow}</p>
+      <h2 class="h2" data-split>{channels.heading}</h2>
+    </div>
+
+    <ul class="channel-list">
+      {
+        channels.items.map((c, i) => (
+          <li class="channel" data-reveal style={`--delay:${i * 0.06}s`}>
+            <span class="channel-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                <path d={icons[c.title] ?? icons['Institusi']} />
+              </svg>
+            </span>
+            <h3 class="channel-title">{c.title}</h3>
+            <p class="channel-text">{c.text}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .channels-grid {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: clamp(32px, 6vw, 96px);
+    align-items: start;
+  }
+
+  .channels-intro {
+    position: sticky;
+    top: calc(var(--header-h) + 40px);
+  }
+
+  .channel {
+    position: relative;
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    grid-template-rows: auto auto;
+    column-gap: 22px;
+    align-items: center;
+    padding: 26px 28px;
+    border-radius: var(--radius);
+    background: #fff;
+    overflow: hidden;
+    isolation: isolate;
+    transition: color 0.5s var(--ease);
+  }
+
+  .channel + .channel {
+    margin-top: 12px;
+  }
+
+  .channel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--grad);
+    clip-path: polygon(0 100%, 0 100%, 0 100%);
+    transition: clip-path 0.7s var(--ease);
+  }
+
+  .channel:hover {
+    color: #fff;
+  }
+
+  .channel:hover::before {
+    clip-path: polygon(0 100%, 0 -60%, 220% 100%);
+  }
+
+  .channel-icon {
+    grid-row: span 2;
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    background: var(--mist);
+    color: var(--navy);
+    transition: background 0.5s, color 0.5s;
+  }
+
+  .channel-icon svg {
+    width: 30px;
+    height: 30px;
+  }
+
+  .channel:hover .channel-icon {
+    background: rgba(255, 255, 255, 0.18);
+    color: #fff;
+  }
+
+  .channel-title {
+    font-size: clamp(1.3rem, 2.2vw, 1.75rem);
+    text-transform: uppercase;
+    color: var(--navy);
+    transition: color 0.5s;
+  }
+
+  .channel:hover .channel-title {
+    color: #fff;
+  }
+
+  .channel-text {
+    color: var(--muted);
+    font-size: 0.95rem;
+    transition: color 0.5s;
+  }
+
+  .channel:hover .channel-text {
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  @media (max-width: 900px) {
+    .channels-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .channels-intro {
+      position: static;
+    }
+
+    .channel {
+      grid-template-columns: 52px 1fr;
+      padding: 20px;
+    }
+
+    .channel-icon {
+      width: 52px;
+      height: 52px;
+    }
+  }
+</style>

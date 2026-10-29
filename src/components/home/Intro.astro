@@ -1,0 +1,180 @@
+---
+import Arrow from '../Arrow.astro';
+import { home } from '../../data/content';
+
+const { intro } = home;
+---
+
+<section class="section intro">
+  <div class="container intro-grid">
+    <div class="intro-media">
+      <div class="intro-photo intro-photo--a" data-reveal>
+        <img src="/images/photos/gudang-forklift.webp" alt="Gudang distribusi BIG dengan forklift" loading="lazy" data-parallax="0.08" />
+      </div>
+      <div class="intro-photo intro-photo--b" data-reveal style="--delay:.15s">
+        <img src="/images/photos/tim-lapangan.webp" alt="Tim lapangan BIG memuat produk ke armada" loading="lazy" />
+      </div>
+      <div class="intro-badge" data-reveal style="--delay:.3s">
+        <strong>Subsidiary</strong>
+        <span>PT Atlantic Biruraya · Mikatasa Group</span>
+      </div>
+    </div>
+
+    <div class="intro-copy">
+      <p class="eyebrow">{intro.eyebrow}</p>
+      <h2 class="h2" data-split>{intro.heading}</h2>
+      <p class="lead" data-reveal>{intro.text}</p>
+
+      <ol class="pillars">
+        {
+          intro.pillars.map((p, i) => (
+            <li data-reveal style={`--delay:${i * 0.1}s`}>
+              <span class="pillar-num">0{i + 1}</span>
+              <div>
+                <h3 class="h3">{p.title}</h3>
+                <p>{p.text}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+
+      <a href="/tentang-kami" class="text-link" data-reveal>
+        Selengkapnya tentang kami <Arrow />
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .intro-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.05fr;
+    gap: clamp(40px, 7vw, 110px);
+    align-items: center;
+  }
+
+  .intro-media {
+    position: relative;
+    aspect-ratio: 0.92;
+  }
+
+  .intro-photo {
+    position: absolute;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    background: var(--mist);
+  }
+
+  .intro-photo img {
+    width: 100%;
+    height: 116%;
+    object-fit: cover;
+  }
+
+  .intro-photo--a {
+    inset: 0 22% 18% 0;
+    border-bottom-left-radius: 120px;
+  }
+
+  .intro-photo--b {
+    right: 0;
+    bottom: 0;
+    width: 52%;
+    aspect-ratio: 1;
+    border: 8px solid #fff;
+    border-top-right-radius: 90px;
+  }
+
+  .intro-photo--b img {
+    height: 100%;
+  }
+
+  .intro-badge {
+    position: absolute;
+    left: -12px;
+    bottom: 6%;
+    display: flex;
+    flex-direction: column;
+    padding: 16px 22px;
+    border-radius: 18px;
+    background: var(--navy);
+    color: #fff;
+    font-size: 0.82rem;
+    box-shadow: 0 24px 40px -24px rgba(0, 34, 63, 0.8);
+  }
+
+  .intro-badge strong {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 1.15rem;
+    text-transform: uppercase;
+  }
+
+  .intro-copy .h2 {
+    margin-bottom: 24px;
+  }
+
+  .pillars {
+    margin: 40px 0 36px;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--line);
+  }
+
+  .pillars li {
+    display: flex;
+    gap: 22px;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .pillar-num {
+    flex: none;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 0.9rem;
+    color: var(--grad-start);
+    padding-top: 4px;
+  }
+
+  .pillars .h3 {
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+
+  .pillars p {
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  .text-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    color: var(--navy);
+    text-decoration: none;
+    border-bottom: 2px solid var(--grad-start);
+    padding-bottom: 4px;
+  }
+
+  .text-link :global(.arrow) {
+    width: 16px;
+    transition: transform 0.4s var(--ease);
+  }
+
+  .text-link:hover :global(.arrow) {
+    transform: translate(3px, -3px);
+  }
+
+  @media (max-width: 900px) {
+    .intro-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .intro-media {
+      max-width: 520px;
+    }
+  }
+</style>

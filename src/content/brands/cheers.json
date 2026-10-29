@@ -1,0 +1,12 @@
+{
+  "name": "Cheers",
+  "category": "Air Minum Dalam Kemasan",
+  "principal": "PT Atlantic Biruraya",
+  "description": "Air minum dalam kemasan untuk setiap kebutuhan — dari cup, botol, hingga galon, serta varian botol kaca untuk segmen premium.",
+  "images": [
+    "/images/products/cheers-family.webp",
+    "/images/products/cheers-glass.webp",
+    "/images/products/cheers-box.webp"
+  ],
+  "order": 1
+}
