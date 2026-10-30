@@ -97,7 +97,7 @@ const clientTotal = clients.reduce((n, c) => n + c.data.names.length, 0);
   <section class="section story">
     <div class="container story-grid">
       <div class="story-logo" data-story-logo>
-        <Logo class="story-logo-svg" />
+        <Logo class="story-logo-svg" safeZone={false} />
       </div>
       <div>
         <p class="eyebrow">Identitas Baru</p>

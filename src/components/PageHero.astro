@@ -1,4 +1,6 @@
 ---
+import { supergraphicViewBox, supergraphicRedSolid, supergraphicNavy, supergraphicWhite } from '../data/supergraphic';
+
 interface Props {
   eyebrow: string;
   title: string;
@@ -10,13 +12,37 @@ const { eyebrow, title, lead, image = '/images/photos/gudang-luas.webp' } = Astr
 ---
 
 <section class="phero on-dark" data-phero>
-  <div class="phero-panel" aria-hidden="true">
-    <img src={image} alt="" />
+  <div class="phero-visual" aria-hidden="true">
+    <!-- Supergraphic from the Logo Playbook, same as the home hero: photo in the red block, navy block, white arrow. -->
+    <svg viewBox={supergraphicViewBox} class="phero-svg">
+      <defs>
+        <clipPath id="phero-red-clip">
+          <path d={supergraphicRedSolid}></path>
+          <!-- Extends the red block upward past the artwork's top edge to the top of the section. -->
+          <rect x="0" y="-4000" width="3508" height="4010"></rect>
+        </clipPath>
+        <linearGradient id="phero-grad" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="3508" y2="0">
+          <stop offset="0" stop-color="#e61e25"></stop>
+          <stop offset="1" stop-color="#b50346"></stop>
+        </linearGradient>
+        <linearGradient id="phero-shade" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#00223f" stop-opacity="0.85"></stop>
+          <stop offset="0.45" stop-color="#00223f" stop-opacity="0.35"></stop>
+          <stop offset="0.7" stop-color="#00223f" stop-opacity="0"></stop>
+        </linearGradient>
+      </defs>
+      <path class="phero-navy" d={supergraphicNavy} fill="#002b52" fill-rule="evenodd"></path>
+      <g clip-path="url(#phero-red-clip)">
+        <g class="phero-panel">
+          <rect y="-4000" width="3508" height="6480" fill="url(#phero-grad)"></rect>
+          <image class="phero-photo" href={image} y="-1200" width="3508" height="3680" preserveAspectRatio="xMidYMid slice"></image>
+          <rect y="-4000" width="3508" height="6480" fill="url(#phero-grad)" class="phero-tint"></rect>
+        </g>
+        <rect class="phero-shade" y="-4000" width="3508" height="6480" fill="url(#phero-shade)"></rect>
+      </g>
+      <path class="phero-arrow" d={supergraphicWhite} fill="#fff" fill-rule="evenodd"></path>
+    </svg>
   </div>
-  <svg class="phero-arrow" viewBox="0 0 100 40" preserveAspectRatio="xMaxYMax meet" aria-hidden="true">
-    <path d="M0 42L90 7" stroke="#fff" stroke-width="1.1" stroke-linecap="round" pathLength="1" class="phero-line"></path>
-    <path d="M87.2 4L95.6 4.8L90 11.1Z" fill="#fff" class="phero-head"></path>
-  </svg>
   <div class="container phero-content">
     <p class="eyebrow phero-fade">{eyebrow}</p>
     <h1 class="display phero-title" data-split="load">{title}</h1>
@@ -37,59 +63,66 @@ const { eyebrow, title, lead, image = '/images/photos/gudang-luas.webp' } = Astr
     color: #fff;
   }
 
-  .phero-panel {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 56%;
-    height: 82%;
-    z-index: -1;
-    clip-path: polygon(14% 0, 100% 0, 100% 46%, 0 100%, 0 0);
-    background: var(--grad);
-  }
-
-  .phero-panel img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    mix-blend-mode: multiply;
-    opacity: 0.85;
-  }
-
-  .phero-arrow {
+  /* Anchored bottom-right so the navy block and the arrow's tail meet the section edge; sized by width so the
+     arrowhead stays clear of the title, with the red block extending up to the top of the section. */
+  .phero-visual {
     position: absolute;
     right: 0;
     bottom: 0;
-    width: 52%;
-    height: 60%;
+    width: clamp(520px, 58vw, 1000px);
+    aspect-ratio: 3508 / 2480;
     z-index: -1;
+  }
+
+  .phero-svg {
+    width: 100%;
+    height: 100%;
     overflow: visible;
   }
 
+  .phero-tint {
+    mix-blend-mode: multiply;
+    opacity: 0.72;
+  }
+
+  .phero-content {
+    position: relative;
+  }
+
   .phero-title {
-    font-size: clamp(2.6rem, 8vw, 6.4rem);
+    font-size: clamp(2.6rem, 7vw, 5.6rem);
     max-width: 10em;
     margin-bottom: 20px;
+    text-shadow: 0 2px 40px rgba(0, 26, 51, 0.35);
   }
 
   .phero .lead {
-    max-width: 52ch;
+    max-width: 46ch;
   }
 
-  @media (max-width: 760px) {
+  @media (max-width: 900px) {
     .phero {
+      flex-direction: column;
+      align-items: stretch;
       min-height: 0;
-      padding-top: calc(var(--header-h) + 200px);
+      padding-top: 0;
     }
 
-    .phero-panel {
-      width: 100%;
-      height: 260px;
-      clip-path: polygon(0 0, 100% 0, 100% 55%, 0 100%);
+    .phero-visual {
+      position: relative;
+      bottom: auto;
+      width: 128vw;
+      margin: calc(var(--header-h) - 8px) -10vw 0 auto;
+      -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent);
+      mask-image: linear-gradient(to bottom, #000 78%, transparent);
     }
 
-    .phero-arrow {
+    .phero-shade {
       display: none;
+    }
+
+    .phero-content {
+      margin-top: -3vw;
     }
   }
 </style>
@@ -101,10 +134,10 @@ const { eyebrow, title, lead, image = '/images/photos/gudang-luas.webp' } = Astr
   if (hero && !reducedMotion) {
     gsap
       .timeline({ defaults: { ease: 'expo.out' } })
-      .from(hero.querySelector('.phero-panel'), { xPercent: 12, yPercent: -10, opacity: 0, duration: 1.5 })
-      .from(hero.querySelector('.phero-panel img'), { scale: 1.25, duration: 2 }, 0)
-      .fromTo(hero.querySelector('.phero-line'), { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.3, ease: 'power3.inOut' }, 0.3)
-      .from(hero.querySelector('.phero-head'), { scale: 0, transformOrigin: '50% 50%', duration: 0.7, ease: 'back.out(2.4)' }, 1.3)
+      .from(hero.querySelector('.phero-panel'), { x: -360, y: 200, opacity: 0, duration: 1.5 })
+      .from(hero.querySelector('.phero-photo'), { scale: 1.25, transformOrigin: '70% 30%', duration: 2 }, 0)
+      .from(hero.querySelector('.phero-navy'), { x: 260, y: 150, opacity: 0, duration: 1.4 }, 0.2)
+      .from(hero.querySelector('.phero-arrow'), { x: -520, y: 300, opacity: 0, duration: 1.3 }, 0.45)
       .from(hero.querySelectorAll('.phero-fade'), { y: 24, opacity: 0, duration: 1, stagger: 0.1 }, 0.5);
   }
 </script>

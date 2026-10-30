@@ -401,7 +401,7 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from 'astro:env/client';
 
   @media (max-width: 960px) {
     .contact-grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
 
     .contact-info {
@@ -412,6 +412,15 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from 'astro:env/client';
   @media (max-width: 600px) {
     .field-row {
       grid-template-columns: 1fr;
+    }
+  }
+
+  /* The captcha widget is a fixed 300px wide: give the form card the full screen width on small phones. */
+  @media (max-width: 480px) {
+    .contact-form-wrap {
+      margin-inline: calc(var(--gutter) * -1);
+      padding: 28px 14px;
+      border-radius: var(--radius);
     }
   }
 </style>
