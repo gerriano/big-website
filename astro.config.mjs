@@ -1,4 +1,6 @@
 // @ts-check
+import { readdir, readFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
 import { defineConfig, envField } from 'astro/config';
 import vercel from '@astrojs/vercel';
 
@@ -6,10 +8,38 @@ import vercel from '@astrojs/vercel';
 // so canonical URLs and social preview images point at a host that actually serves them.
 const productionHost = process.env.VERCEL_PROJECT_PRODUCTION_URL;
 
+/**
+ * Fails a production build when any page is missing the GTM tag (or carries it twice), so a new page that
+ * skips src/layouts/Base.astro never ships untracked. /admin is the internal CMS and stays untracked.
+ * @returns {import('astro').AstroIntegration}
+ */
+const requireGtm = () => ({
+  name: 'require-gtm',
+  hooks: {
+    'astro:build:done': async ({ dir, logger }) => {
+      if (process.env.VERCEL_ENV !== 'production') return;
+      const root = fileURLToPath(dir);
+      const pages = (await readdir(root, { recursive: true })).filter(
+        (f) => f.endsWith('.html') && !f.startsWith('admin'),
+      );
+      const bad = [];
+      for (const page of pages) {
+        const count = (await readFile(`${root}/${page}`, 'utf8')).split('GTM-5MCN5ZMD').length - 1;
+        if (count !== 1) bad.push(`${page} (${count}x)`);
+      }
+      if (bad.length) {
+        throw new Error(`Google Tag Manager must appear exactly once per page; use layouts/Base.astro: ${bad.join(', ')}`);
+      }
+      logger.info(`GTM present on all ${pages.length} pages`);
+    },
+  },
+});
+
 export default defineConfig({
   site: productionHost ? `https://${productionHost}` : 'https://www.bhineka.global',
   output: 'static',
   adapter: vercel(),
+  integrations: [requireGtm()],
   trailingSlash: 'ignore',
   devToolbar: { enabled: false },
   // Astro's built-in origin check rejects every form POST behind Vercel's proxy. The only POST endpoint is
