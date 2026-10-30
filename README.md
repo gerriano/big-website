@@ -72,6 +72,21 @@ Editor CMS harus punya akun GitHub dengan akses *write* ke repo ini.
 Subjek: `[Kategori Inquiry] Subjek dari pengirim`, contoh `[Kemitraan Prinsipal] Distribusi produk snack`.
 *Reply-To* diisi email pengirim, jadi cukup klik **Reply**.
 
+## Google Tag Manager
+
+Container `GTM-5MCN5ZMD` dipasang di `src/layouts/Base.astro` dan **hanya ikut di build production** Vercel (`VERCEL_ENV=production`). Preview deployment dan `npm run dev` tidak memuatnya, jadi data analytics tidak tercampur trafik pengetesan.
+
+**Standar untuk halaman baru:** setiap halaman di `src/pages/` wajib memakai layout `Base`:
+
+```astro
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Judul Halaman">...</Base>
+```
+
+Jangan menempel snippet GTM manual di halaman. Build production otomatis **gagal** kalau ada halaman tanpa tag GTM atau dengan tag ganda (pengecekan `require-gtm` di `astro.config.mjs`). Pengecualian: `/admin` (panel CMS internal).
+
 ## Catatan teknis
 
 - Peta Indonesia dibuat dari data Natural Earth (`npm run build:map` → `src/data/indonesia-map.json`).
