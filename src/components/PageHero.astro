@@ -1,5 +1,5 @@
 ---
-import { supergraphicViewBox, supergraphicRed, supergraphicNavy, supergraphicWhite } from '../data/supergraphic';
+import { supergraphicViewBox, supergraphicRedSolid, supergraphicNavy, supergraphicWhite } from '../data/supergraphic';
 
 interface Props {
   eyebrow: string;
@@ -17,7 +17,9 @@ const { eyebrow, title, lead, image = '/images/photos/gudang-luas.webp' } = Astr
     <svg viewBox={supergraphicViewBox} class="phero-svg">
       <defs>
         <clipPath id="phero-red-clip">
-          <path d={supergraphicRed} clip-rule="evenodd"></path>
+          <path d={supergraphicRedSolid}></path>
+          <!-- Extends the red block upward past the artwork's top edge to the top of the section. -->
+          <rect x="0" y="-4000" width="3508" height="4010"></rect>
         </clipPath>
         <linearGradient id="phero-grad" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="3508" y2="0">
           <stop offset="0" stop-color="#e61e25"></stop>
@@ -32,11 +34,11 @@ const { eyebrow, title, lead, image = '/images/photos/gudang-luas.webp' } = Astr
       <path class="phero-navy" d={supergraphicNavy} fill="#002b52" fill-rule="evenodd"></path>
       <g clip-path="url(#phero-red-clip)">
         <g class="phero-panel">
-          <rect width="3508" height="2480" fill="url(#phero-grad)"></rect>
-          <image class="phero-photo" href={image} width="3508" height="2480" preserveAspectRatio="xMidYMid slice"></image>
-          <rect width="3508" height="2480" fill="url(#phero-grad)" class="phero-tint"></rect>
+          <rect y="-4000" width="3508" height="6480" fill="url(#phero-grad)"></rect>
+          <image class="phero-photo" href={image} y="-1200" width="3508" height="3680" preserveAspectRatio="xMidYMid slice"></image>
+          <rect y="-4000" width="3508" height="6480" fill="url(#phero-grad)" class="phero-tint"></rect>
         </g>
-        <rect class="phero-shade" width="3508" height="2480" fill="url(#phero-shade)"></rect>
+        <rect class="phero-shade" y="-4000" width="3508" height="6480" fill="url(#phero-shade)"></rect>
       </g>
       <path class="phero-arrow" d={supergraphicWhite} fill="#fff" fill-rule="evenodd"></path>
     </svg>
@@ -61,13 +63,13 @@ const { eyebrow, title, lead, image = '/images/photos/gudang-luas.webp' } = Astr
     color: #fff;
   }
 
-  /* Anchored bottom-right at full height so the navy block and the arrow's tail meet the section edge. */
+  /* Anchored bottom-right so the navy block and the arrow's tail meet the section edge; sized by width so the
+     arrowhead stays clear of the title, with the red block extending up to the top of the section. */
   .phero-visual {
     position: absolute;
     right: 0;
     bottom: 0;
-    height: 100%;
-    max-width: 96vw;
+    width: clamp(520px, 58vw, 1000px);
     aspect-ratio: 3508 / 2480;
     z-index: -1;
   }
@@ -75,6 +77,7 @@ const { eyebrow, title, lead, image = '/images/photos/gudang-luas.webp' } = Astr
   .phero-svg {
     width: 100%;
     height: 100%;
+    overflow: visible;
   }
 
   .phero-tint {
@@ -108,8 +111,6 @@ const { eyebrow, title, lead, image = '/images/photos/gudang-luas.webp' } = Astr
     .phero-visual {
       position: relative;
       bottom: auto;
-      height: auto;
-      max-width: none;
       width: 128vw;
       margin: calc(var(--header-h) - 8px) -10vw 0 auto;
       -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent);

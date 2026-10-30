@@ -1,7 +1,7 @@
 ---
 import Arrow from '../Arrow.astro';
 import { home, site } from '../../data/content';
-import { supergraphicViewBox, supergraphicRed, supergraphicNavy, supergraphicWhite } from '../../data/supergraphic';
+import { supergraphicViewBox, supergraphicRedSolid, supergraphicNavy, supergraphicWhite } from '../../data/supergraphic';
 
 const { hero } = home;
 ---
@@ -14,7 +14,9 @@ const { hero } = home;
     <svg viewBox={supergraphicViewBox} class="hero-svg">
       <defs>
         <clipPath id="hero-red-clip">
-          <path d={supergraphicRed} clip-rule="evenodd"></path>
+          <path d={supergraphicRedSolid}></path>
+          <!-- Extends the red block upward past the artwork's top edge to the top of the section. -->
+          <rect x="0" y="-4000" width="3508" height="4010"></rect>
         </clipPath>
         <linearGradient id="hero-grad" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="3508" y2="0">
           <stop offset="0" stop-color="#e61e25"></stop>
@@ -32,17 +34,15 @@ const { hero } = home;
 
       <g clip-path="url(#hero-red-clip)">
         <g class="hero-panel" data-hero-panel>
-          <rect width="3508" height="2480" fill="url(#hero-grad)"></rect>
+          <rect y="-4000" width="3508" height="6480" fill="url(#hero-grad)"></rect>
           <image
             class="hero-photo"
             data-hero-photo
             href="/images/photos/forklift-rak.webp"
-            width="3508"
-            height="2480"
-            preserveAspectRatio="xMidYMid slice"></image>
-          <rect width="3508" height="2480" fill="url(#hero-grad)" class="hero-tint"></rect>
+            y="-1200" width="3508" height="3680" preserveAspectRatio="xMidYMid slice"></image>
+          <rect y="-4000" width="3508" height="6480" fill="url(#hero-grad)" class="hero-tint"></rect>
         </g>
-        <rect class="hero-shade" width="3508" height="2480" fill="url(#hero-shade)"></rect>
+        <rect class="hero-shade" y="-4000" width="3508" height="6480" fill="url(#hero-shade)"></rect>
       </g>
 
       <path class="hero-arrow" data-hero-arrow d={supergraphicWhite} fill="#fff" fill-rule="evenodd"></path>
@@ -89,13 +89,13 @@ const { hero } = home;
     z-index: -1;
   }
 
-  /* Anchored bottom-right at full hero height, like the playbook page: the navy block and the arrow's tail run to the edge. */
+  /* Anchored bottom-right like the playbook page: the navy block and the arrow's tail run to the section edge.
+     Sized by width so the arrowhead always sits to the right of the headline; the red block extends up to the top. */
   .hero-visual {
     position: absolute;
     bottom: 0;
     right: 0;
-    height: 100%;
-    max-width: 96vw;
+    width: clamp(560px, 62vw, 1100px);
     aspect-ratio: 3508 / 2480;
     z-index: -1;
   }
@@ -193,8 +193,6 @@ const { hero } = home;
     .hero-visual {
       position: relative;
       bottom: auto;
-      height: auto;
-      max-width: none;
       width: 128vw;
       margin: 0 -10vw 0 auto;
       margin-top: calc(var(--header-h) - 8px);

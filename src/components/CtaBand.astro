@@ -21,6 +21,8 @@ const { heading = home.cta.heading, text = home.cta.text, primary = home.cta.pri
         <stop offset="1" stop-color="#b50346"></stop>
       </linearGradient>
     </defs>
+    <!-- The arrow is the white showing between the two blocks, so the artwork carries its own white ground. -->
+    <rect class="cta-ground" width="3508" height="2480" fill="#fff"></rect>
     <path class="cta-red" d={supergraphicRed} fill="url(#cta-grad)" fill-rule="evenodd"></path>
     <path class="cta-navy" d={supergraphicNavy} fill="#003665" fill-rule="evenodd"></path>
   </svg>
