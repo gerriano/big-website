@@ -1,6 +1,7 @@
 ---
 import Arrow from './Arrow.astro';
 import { home } from '../data/content';
+import { supergraphicViewBox, supergraphicRed, supergraphicNavy } from '../data/supergraphic';
 
 interface Props {
   heading?: string;
@@ -13,9 +14,15 @@ const { heading = home.cta.heading, text = home.cta.text, primary = home.cta.pri
 ---
 
 <section class="cta on-dark" data-cta>
-  <svg class="cta-arrow" viewBox="0 0 100 60" preserveAspectRatio="xMaxYMax meet" aria-hidden="true">
-    <path d="M0 62L92 14" stroke="#fff" stroke-width="2.4" stroke-linecap="round" pathLength="1" class="cta-arrow-line"></path>
-    <path d="M88.4 10.3L97.3 11.2L93 19.1Z" fill="#fff" class="cta-arrow-head"></path>
+  <svg class="cta-art" viewBox={supergraphicViewBox} preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+    <defs>
+      <linearGradient id="cta-grad" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="3508" y2="0">
+        <stop offset="0" stop-color="#e61e25"></stop>
+        <stop offset="1" stop-color="#b50346"></stop>
+      </linearGradient>
+    </defs>
+    <path class="cta-red" d={supergraphicRed} fill="url(#cta-grad)" fill-rule="evenodd"></path>
+    <path class="cta-navy" d={supergraphicNavy} fill="#003665" fill-rule="evenodd"></path>
   </svg>
   <div class="container cta-inner">
     <h2 class="h2 cta-title" data-split>{heading}</h2>
@@ -28,74 +35,78 @@ const { heading = home.cta.heading, text = home.cta.text, primary = home.cta.pri
 </section>
 
 <style>
+  /* The playbook's closing composition: red block, navy block, and the white arrow formed by the gap between them. */
   .cta {
     position: relative;
     overflow: hidden;
-    background: var(--grad);
-    color: #fff;
-    padding-block: clamp(80px, 11vw, 150px);
     isolation: isolate;
+    display: flex;
+    align-items: flex-start;
+    /* Tall enough that the copy stays on the red block, above the arrow's barb. */
+    min-height: clamp(600px, 62vw, 1000px);
+    padding-block: clamp(64px, 7vw, 110px);
+    background: #fff;
+    color: #fff;
   }
 
-  .cta::before {
-    content: '';
+  .cta-art {
     position: absolute;
-    right: 0;
-    bottom: 0;
-    width: 70%;
-    height: 70%;
+    inset: 0;
+    width: 100%;
+    height: 100%;
     z-index: -1;
-    background: var(--navy);
-    clip-path: polygon(100% 0, 100% 100%, 0 100%);
-  }
-
-  .cta-arrow {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    width: 74%;
-    height: 78%;
-    z-index: -1;
-    opacity: 0.95;
-    overflow: visible;
   }
 
   .cta-inner {
     position: relative;
   }
 
-  @media (max-width: 700px) {
-    .cta::before {
-      height: 34%;
-    }
-
-    .cta-arrow {
-      width: 100%;
-      height: 32%;
-    }
-  }
-
   .cta-title {
-    max-width: 12em;
-    font-size: clamp(2.2rem, 5.6vw, 4.6rem);
+    max-width: 9em;
+    font-size: clamp(2.2rem, 4.2vw, 3.8rem);
     text-transform: uppercase;
     margin-bottom: 20px;
   }
 
   .cta .lead {
-    color: rgba(255, 255, 255, 0.88);
+    max-width: 46ch;
+    color: rgba(255, 255, 255, 0.9);
     margin-bottom: 34px;
+  }
+
+  /* Narrow screens: the copy sits on a red band whose gradient matches the artwork's, and the full composition follows. */
+  @media (max-width: 900px) {
+    .cta {
+      flex-direction: column;
+      min-height: 0;
+      padding-block: 64px 0;
+      background: linear-gradient(90deg, #e61e25, #b50346);
+    }
+
+    .cta-art {
+      position: relative;
+      inset: auto;
+      height: auto;
+      aspect-ratio: 3508 / 2480;
+      margin-top: -1px;
+      order: 2;
+    }
+
+    .cta-inner {
+      padding-bottom: 8px;
+    }
   }
 </style>
 
 <script>
   import { gsap, reducedMotion } from '../scripts/motion';
 
+  // Red and navy blocks slide apart along the arrow's own angle, opening up the white arrow.
   document.querySelectorAll<HTMLElement>('[data-cta]').forEach((cta) => {
     if (reducedMotion) return;
     gsap
-      .timeline({ scrollTrigger: { trigger: cta, start: 'top 70%' } })
-      .fromTo(cta.querySelector('.cta-arrow-line'), { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.3, ease: 'power3.inOut' })
-      .from(cta.querySelector('.cta-arrow-head'), { scale: 0, transformOrigin: '50% 50%', duration: 0.7, ease: 'back.out(2.4)' }, 1);
+      .timeline({ scrollTrigger: { trigger: cta, start: 'top 75%' }, defaults: { duration: 1.4, ease: 'expo.out' } })
+      .from(cta.querySelector('.cta-navy'), { x: 260, y: 150, opacity: 0 })
+      .from(cta.querySelector('.cta-red'), { x: -200, y: -110, opacity: 0 }, 0.1);
   });
 </script>

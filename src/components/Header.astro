@@ -12,8 +12,9 @@ const nav = [
   { href: '/', label: 'Beranda' },
   { href: '/brand', label: 'Brand' },
   { href: '/tentang-kami', label: 'Tentang Kami' },
-  { href: '/kontak', label: 'Kontak' },
 ];
+// Desktop reaches the contact page through the "Hubungi Kami" button; the mobile menu has no button, so it lists it.
+const mobileNav = [...nav, { href: '/kontak', label: 'Hubungi Kami' }];
 ---
 
 <header class:list={['site-header', { 'over-dark': overDark }]} data-header>
@@ -37,7 +38,7 @@ const nav = [
       </ul>
     </nav>
 
-    <a href="/kontak" class="btn header-cta">Hubungi Kami</a>
+    <a href="/kontak" class="btn header-cta" aria-current={path === '/kontak' ? 'page' : undefined}>Hubungi Kami</a>
 
     <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" data-menu-toggle>
       <span class="sr-only">Buka menu</span>
@@ -51,7 +52,7 @@ const nav = [
     <nav class="container" aria-label="Navigasi seluler">
       <ul>
         {
-          nav.map((item, i) => (
+          mobileNav.map((item, i) => (
             <li style={`--i:${i}`}>
               <a href={item.href} aria-current={path === item.href ? 'page' : undefined}>
                 <span class="num">0{i + 1}</span>
@@ -106,7 +107,9 @@ const nav = [
     position: relative;
     z-index: 2;
     display: block;
-    width: 112px;
+    /* Sized so the logo plus its clear space fits the header height exactly. */
+    width: 136px;
+    margin-left: -12px;
     flex: none;
   }
 
@@ -293,7 +296,8 @@ const nav = [
     }
 
     .brand {
-      width: 96px;
+      width: 124px;
+      margin-left: -11px;
     }
   }
 </style>

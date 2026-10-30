@@ -1,14 +1,16 @@
 ---
-import { logoViewBox, markViewBox, logoRed, logoNavyMark, logoNavyText } from '../data/logo';
+import { logoViewBox, markViewBox, logoSafeViewBox, markSafeViewBox, logoRed, logoNavyMark, logoNavyText } from '../data/logo';
 
 interface Props {
   variant?: 'color' | 'white' | 'navy';
   markOnly?: boolean;
+  /** Include the playbook's transparent clear space around the logo. */
+  safeZone?: boolean;
   class?: string;
   title?: string;
 }
 
-const { variant = 'color', markOnly = false, class: className, title = 'Bhineka Inovasi Global', ...rest } = Astro.props;
+const { variant = 'color', markOnly = false, safeZone = true, class: className, title = 'Bhineka Inovasi Global', ...rest } = Astro.props;
 const gid = `big-grad-${Math.random().toString(36).slice(2, 8)}`;
 const redFill = variant === 'color' ? `url(#${gid})` : variant === 'white' ? '#fff' : '#003665';
 const navyFill = variant === 'white' ? '#fff' : '#003665';
@@ -16,7 +18,7 @@ const navyFill = variant === 'white' ? '#fff' : '#003665';
 
 <svg
   class:list={['logo', className]}
-  viewBox={markOnly ? markViewBox : logoViewBox}
+  viewBox={markOnly ? (safeZone ? markSafeViewBox : markViewBox) : safeZone ? logoSafeViewBox : logoViewBox}
   role="img"
   aria-label={title}
   xmlns="http://www.w3.org/2000/svg"
