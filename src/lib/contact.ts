@@ -91,7 +91,7 @@ ${rows.map(([k, v]) => `<tr><td style="padding:8px 0;color:#55657a;width:170px;v
 }
 
 export async function verifyTurnstile(token: string, secret: string | undefined, ip?: string) {
-  // Cloudflare's documented always-pass test secret, used only until the real secret is configured.
+  // Cloudflare's documented always-pass test secret, for local and preview builds (production refuses it upstream).
   if (!secret) console.warn('[contact] TURNSTILE_SECRET_KEY is not set; using the Cloudflare test key (no bot protection).');
   const key = secret || '1x0000000000000000000000000000000AA';
   const body = new URLSearchParams({ secret: key, response: token });

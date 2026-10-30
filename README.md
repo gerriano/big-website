@@ -41,11 +41,19 @@ Lihat `.env.example`. Isi di **Vercel → Project → Settings → Environment V
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS` | Server email dari tim IT (cPanel). Port 465 → `SMTP_SECURE=true`; port 587 → `false` |
 | `MAIL_TO` | Tujuan notifikasi (default `info@bhineka.global`) |
 | `MAIL_FROM` | Alamat pengirim (default = `SMTP_USER`) |
-| `PUBLIC_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY` | Captcha Cloudflare Turnstile. **Tanpa ini dipakai test key yang selalu lolos (tidak ada proteksi bot).** |
+| `PUBLIC_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY` | Captcha Cloudflare Turnstile (scope **Production**). Tanpa ini, lokal & preview memakai test key yang selalu lolos; **Production menolak semua kiriman form** sampai kunci asli diisi. |
 | `GITHUB_OAUTH_CLIENT_ID`, `GITHUB_OAUTH_CLIENT_SECRET` | Login CMS |
 
 ### Membuat kunci Turnstile
-Cloudflare dashboard → Turnstile → *Add widget* → domain: `bhineka.global` dan domain Vercel (`*.vercel.app` yang dipakai) → salin *Site key* & *Secret key*.
+1. Cloudflare dashboard (akun gratis; domain **tidak** perlu dipindah ke Cloudflare) → Turnstile → *Add widget*.
+2. Hostname: `bhineka.global` (tambah `www.bhineka.global` jika dipakai). Mode widget: **Managed**.
+3. Salin *Site key* → `PUBLIC_TURNSTILE_SITE_KEY` dan *Secret key* → `TURNSTILE_SECRET_KEY`, centang environment **Production** saja (preview tetap memakai test key).
+4. **Redeploy** — site key tertanam di HTML saat build, jadi tanpa build ulang tidak berubah.
+5. Uji: token palsu harus ditolak dengan pesan *Verifikasi keamanan gagal*:
+
+   ```bash
+   curl -s -X POST https://bhineka.global/api/contact -F 'cf-turnstile-response=XXXX.DUMMY.TOKEN.XXXX'
+   ```
 
 ### Membuat GitHub OAuth App (login CMS)
 GitHub → Settings → Developer settings → OAuth Apps → *New OAuth App*:

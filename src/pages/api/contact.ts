@@ -9,6 +9,7 @@ import {
   MAIL_TO,
   MAIL_FROM,
   TURNSTILE_SECRET_KEY,
+  VERCEL_ENV,
 } from 'astro:env/server';
 import { mailBodies, mailSubject, parseInquiry, verifyTurnstile } from '../../lib/contact';
 import site from '../../content/settings/site.json';
@@ -28,6 +29,12 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 
   // Honeypot filled → silently accept so bots learn nothing.
   if (String(form.get('website') ?? '').trim()) return reply(200, true, 'OK');
+
+  // The always-pass test key is for local and preview only: without a real secret, production takes no inquiries.
+  if (!TURNSTILE_SECRET_KEY && VERCEL_ENV === 'production') {
+    console.error('[contact] TURNSTILE_SECRET_KEY is not set in production; inquiry refused.');
+    return reply(503, false, `Formulir sedang dalam perbaikan. Silakan email kami langsung di ${site.email}.`);
+  }
 
   const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || clientAddress;
   const token = String(form.get('cf-turnstile-response') ?? '');
