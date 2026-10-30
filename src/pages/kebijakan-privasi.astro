@@ -1,0 +1,305 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { site } from '../data/content';
+
+const updated = '30 Oktober 2026';
+const headOffice = site.offices[0];
+
+const sections = [
+  { id: 'data', title: 'Data yang kami kumpulkan' },
+  { id: 'tujuan', title: 'Tujuan penggunaan' },
+  { id: 'dasar', title: 'Dasar pemrosesan' },
+  { id: 'pihak-ketiga', title: 'Penyedia layanan pihak ketiga' },
+  { id: 'penyimpanan', title: 'Penyimpanan & keamanan' },
+  { id: 'cookie', title: 'Cookie' },
+  { id: 'hak', title: 'Hak Anda' },
+  { id: 'perubahan', title: 'Perubahan kebijakan' },
+  { id: 'kontak', title: 'Hubungi kami' },
+];
+---
+
+<Base
+  title="Kebijakan Privasi"
+  description={`Cara ${site.companyName} mengumpulkan, menggunakan, dan melindungi data pribadi pengunjung website bhineka.global.`}
+>
+  <PageHero eyebrow="Legal" title="Kebijakan Privasi" lead={`Terakhir diperbarui ${updated}.`} />
+
+  <section class="section">
+    <div class="container policy">
+      <nav class="policy-toc" aria-label="Daftar isi">
+        <p class="eyebrow">Daftar isi</p>
+        <ol>
+          {sections.map((s) => (
+            <li>
+              <a href={`#${s.id}`}>{s.title}</a>
+            </li>
+          ))}
+        </ol>
+      </nav>
+
+      <div class="policy-body">
+        <p class="policy-intro">
+          {site.companyName} (“BIG” atau “kami”) menghormati privasi Anda. Kebijakan ini menjelaskan data pribadi apa yang kami
+          kumpulkan melalui website bhineka.global, untuk apa data itu digunakan, dan hak Anda atas data tersebut sesuai
+          Undang-Undang Nomor 27 Tahun 2022 tentang Pelindungan Data Pribadi.
+        </p>
+
+        <h2 id="data">1. Data yang kami kumpulkan</h2>
+        <p>Kami hanya mengumpulkan data yang Anda berikan secara sukarela dan data teknis yang diperlukan agar website berjalan aman.</p>
+        <h3>Data yang Anda isi di formulir kontak</h3>
+        <ul>
+          <li>Kategori inquiry dan subjek pesan</li>
+          <li>Nama lengkap</li>
+          <li>Nama perusahaan atau toko (jika diisi)</li>
+          <li>Alamat email</li>
+          <li>Nomor telepon atau WhatsApp</li>
+          <li>Isi pesan</li>
+        </ul>
+        <h3>Data teknis</h3>
+        <p>
+          Saat Anda membuka website atau mengirim formulir, alamat IP, jenis browser dan perangkat, serta waktu akses dapat
+          tercatat oleh penyedia hosting dan layanan verifikasi keamanan kami (lihat bagian 4).
+        </p>
+        <h3>Statistik kunjungan</h3>
+        <p>
+          Kami menggunakan Google Analytics, dipasang melalui Google Tag Manager, untuk memahami cara website digunakan: halaman
+          yang dibuka, lama kunjungan, sumber kunjungan, jenis perangkat, dan perkiraan lokasi (kota atau negara). Data ini kami
+          lihat sebagai statistik gabungan dan tidak kami gunakan untuk mengenali Anda secara pribadi.
+        </p>
+
+        <h2 id="tujuan">2. Tujuan penggunaan</h2>
+        <ul>
+          <li>Membaca, menanggapi, dan menindaklanjuti inquiry Anda sesuai kategori yang dipilih, misalnya kemitraan, pemesanan produk, atau karier.</li>
+          <li>Menghubungi Anda kembali melalui email atau telepon terkait inquiry tersebut.</li>
+          <li>Melindungi website dan formulir dari spam, bot, dan penyalahgunaan.</li>
+          <li>Menjaga keamanan dan keandalan website.</li>
+          <li>Memahami penggunaan website secara statistik untuk memperbaiki isi dan tampilannya.</li>
+        </ul>
+        <p>Kami tidak menjual data pribadi Anda dan tidak menggunakannya untuk iklan.</p>
+
+        <h2 id="dasar">3. Dasar pemrosesan</h2>
+        <ul>
+          <li><strong>Persetujuan Anda</strong>, yang Anda berikan saat mengisi dan mengirim formulir kontak.</li>
+          <li><strong>Kepentingan yang sah</strong>, untuk menjaga keamanan website, mencegah penyalahgunaan, dan memahami penggunaan website secara statistik.</li>
+          <li><strong>Kewajiban hukum</strong>, bila peraturan perundang-undangan mewajibkan kami menyimpan atau mengungkapkan data tertentu.</li>
+        </ul>
+
+        <h2 id="pihak-ketiga">4. Penyedia layanan pihak ketiga</h2>
+        <p>Untuk menjalankan website, kami menggunakan penyedia layanan berikut. Mereka memproses data hanya sejauh diperlukan untuk layanannya.</p>
+        <dl class="policy-vendors">
+          <div>
+            <dt>Vercel Inc.</dt>
+            <dd>Hosting website dan server yang meneruskan isi formulir kontak ke email kami.</dd>
+          </div>
+          <div>
+            <dt>Cloudflare, Inc. (Turnstile)</dt>
+            <dd>Verifikasi keamanan di formulir kontak untuk membedakan manusia dari bot. Memproses data teknis perangkat dan alamat IP.</dd>
+          </div>
+          <div>
+            <dt>Resend, Inc.</dt>
+            <dd>Pengiriman isi formulir kontak sebagai email ke kotak masuk kami.</dd>
+          </div>
+          <div>
+            <dt>Google LLC</dt>
+            <dd>
+              Google Analytics dan Google Tag Manager untuk statistik kunjungan, layanan email perusahaan tempat pesan formulir
+              diterima, serta peta Google Maps di halaman Hubungi Kami.
+            </dd>
+          </div>
+        </dl>
+        <p>
+          Server penyedia layanan ini dapat berada di luar Indonesia, sehingga data Anda dapat diproses di luar wilayah Indonesia. Kami
+          memilih penyedia yang menerapkan standar pelindungan data yang memadai.
+        </p>
+
+        <h2 id="penyimpanan">5. Penyimpanan &amp; keamanan</h2>
+        <p>
+          Website ini tidak menyimpan isi formulir di database. Pesan Anda dikirim sebagai email ke kotak masuk
+          {` ${site.email}`}, yang hanya dapat diakses oleh tim yang berwenang.
+        </p>
+        <p>
+          Kami menyimpan data pribadi selama diperlukan untuk menanggapi dan menindaklanjuti inquiry Anda, atau selama diwajibkan
+          oleh peraturan perundang-undangan. Setelah itu data dihapus atau dimusnahkan.
+        </p>
+        <p>Seluruh koneksi ke website ini dienkripsi dengan HTTPS.</p>
+
+        <h2 id="cookie">6. Cookie</h2>
+        <p>
+          Google Analytics menyimpan cookie (misalnya <code>_ga</code>) di browser Anda untuk membedakan kunjungan. Verifikasi
+          keamanan Cloudflare dan peta Google Maps juga dapat menggunakan cookie atau teknologi serupa sesuai kebijakan privasi
+          masing-masing:
+          <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener">Cloudflare</a> dan
+          <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google</a>.
+        </p>
+        <p>
+          Anda dapat menolak atau menghapus cookie melalui pengaturan browser, atau memasang
+          <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">add-on penolakan Google Analytics</a>.
+          Website tetap dapat digunakan tanpa cookie tersebut.
+        </p>
+
+        <h2 id="hak">7. Hak Anda</h2>
+        <p>Sesuai UU Pelindungan Data Pribadi, Anda berhak untuk:</p>
+        <ul>
+          <li>Mendapatkan informasi tentang data pribadi Anda yang kami proses dan tujuannya.</li>
+          <li>Mengakses dan memperoleh salinan data pribadi Anda.</li>
+          <li>Memperbarui atau memperbaiki data yang tidak akurat.</li>
+          <li>Meminta penghapusan data pribadi Anda.</li>
+          <li>Menarik kembali persetujuan yang telah Anda berikan.</li>
+          <li>Mengajukan keberatan atau meminta pembatasan pemrosesan data Anda.</li>
+        </ul>
+        <p>
+          Untuk menggunakan hak tersebut, kirim email ke <a href={`mailto:${site.email}`}>{site.email}</a> dengan subjek
+          “Permintaan Data Pribadi”. Kami dapat meminta informasi tambahan untuk memastikan permintaan berasal dari Anda.
+        </p>
+
+        <h2 id="perubahan">8. Perubahan kebijakan</h2>
+        <p>
+          Kebijakan ini dapat kami perbarui sewaktu-waktu. Versi terbaru selalu tersedia di halaman ini, dengan tanggal pembaruan di
+          bagian atas.
+        </p>
+
+        <h2 id="kontak">9. Hubungi kami</h2>
+        <address class="policy-contact">
+          <strong>{site.companyName}</strong><br />
+          {headOffice.address}<br />
+          Email: <a href={`mailto:${site.email}`}>{site.email}</a><br />
+          Telepon: <a href={`tel:${headOffice.phone.replace(/[^\d+]/g, '')}`}>{headOffice.phone}</a>
+        </address>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .policy {
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    gap: clamp(32px, 6vw, 96px);
+    align-items: start;
+  }
+
+  .policy-toc {
+    position: sticky;
+    top: calc(var(--header-h) + 24px);
+    font-size: 0.9rem;
+  }
+
+  .policy-toc ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: toc;
+  }
+
+  .policy-toc li {
+    counter-increment: toc;
+  }
+
+  .policy-toc li + li {
+    margin-top: 10px;
+  }
+
+  .policy-toc a {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .policy-toc a::before {
+    content: counter(toc) '. ';
+  }
+
+  .policy-toc a:hover {
+    color: var(--navy);
+  }
+
+  .policy-body {
+    max-width: 72ch;
+    line-height: 1.75;
+  }
+
+  .policy-intro {
+    font-size: clamp(1.05rem, 1.4vw, 1.2rem);
+    color: var(--navy);
+  }
+
+  .policy-body h2 {
+    font-size: clamp(1.4rem, 2.4vw, 1.9rem);
+    color: var(--navy);
+    margin: 56px 0 16px;
+    scroll-margin-top: calc(var(--header-h) + 24px);
+  }
+
+  .policy-body h3 {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 0;
+    color: var(--ink);
+    margin: 24px 0 8px;
+  }
+
+  .policy-body p + p,
+  .policy-body ul + p,
+  .policy-body p + ul,
+  .policy-body dl + p {
+    margin-top: 14px;
+  }
+
+  .policy-body ul {
+    list-style: disc;
+    padding-left: 1.3em;
+  }
+
+  .policy-body li + li {
+    margin-top: 6px;
+  }
+
+  .policy-body li::marker {
+    color: var(--grad-start);
+  }
+
+  .policy-body a {
+    color: var(--navy);
+    text-underline-offset: 3px;
+  }
+
+  .policy-vendors {
+    display: grid;
+    gap: 12px;
+    margin: 18px 0 0;
+  }
+
+  .policy-vendors div {
+    padding: 18px 22px;
+    border-radius: 14px;
+    background: var(--mist);
+  }
+
+  .policy-vendors dt {
+    font-weight: 600;
+    color: var(--navy);
+  }
+
+  .policy-vendors dd {
+    margin: 4px 0 0;
+    color: var(--muted);
+  }
+
+  .policy-contact {
+    font-style: normal;
+  }
+
+  @media (max-width: 860px) {
+    .policy {
+      grid-template-columns: 1fr;
+    }
+
+    .policy-toc {
+      position: static;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--line);
+    }
+  }
+</style>
