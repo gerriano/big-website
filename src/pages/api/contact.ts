@@ -45,8 +45,10 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   const { data, error } = parseInquiry(form);
   if (!data) return reply(400, false, error ?? 'Data tidak valid.');
 
-  if (!SMTP_HOST || !SMTP_USER || !SMTP_PASS) {
-    console.error('[contact] SMTP is not configured; inquiry not sent.');
+  // Services such as Resend log in with a non-address user, so the sender then has to come from MAIL_FROM.
+  const from = MAIL_FROM || SMTP_USER;
+  if (!SMTP_HOST || !SMTP_USER || !SMTP_PASS || !from?.includes('@')) {
+    console.error('[contact] SMTP is not configured (host, user, password and a MAIL_FROM address); inquiry not sent.');
     return reply(503, false, `Formulir sedang dalam perbaikan. Silakan email kami langsung di ${site.email}.`);
   }
 
@@ -61,7 +63,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 
   try {
     await transporter.sendMail({
-      from: { name: 'Website BIG', address: MAIL_FROM || SMTP_USER },
+      from: { name: 'Website BIG', address: from },
       to: MAIL_TO,
       replyTo: { name: data.name, address: data.email },
       subject: mailSubject(data),

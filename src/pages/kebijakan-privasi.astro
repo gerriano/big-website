@@ -61,8 +61,11 @@ const sections = [
           Saat Anda membuka website atau mengirim formulir, alamat IP, jenis browser dan perangkat, serta waktu akses dapat
           tercatat oleh penyedia hosting dan layanan verifikasi keamanan kami (lihat bagian 4).
         </p>
+        <h3>Statistik kunjungan</h3>
         <p>
-          Website ini <strong>tidak</strong> menggunakan alat analitik, piksel iklan, atau pelacakan pemasaran.
+          Kami menggunakan Google Analytics, dipasang melalui Google Tag Manager, untuk memahami cara website digunakan: halaman
+          yang dibuka, lama kunjungan, sumber kunjungan, jenis perangkat, dan perkiraan lokasi (kota atau negara). Data ini kami
+          lihat sebagai statistik gabungan dan tidak kami gunakan untuk mengenali Anda secara pribadi.
         </p>
 
         <h2 id="tujuan">2. Tujuan penggunaan</h2>
@@ -71,13 +74,14 @@ const sections = [
           <li>Menghubungi Anda kembali melalui email atau telepon terkait inquiry tersebut.</li>
           <li>Melindungi website dan formulir dari spam, bot, dan penyalahgunaan.</li>
           <li>Menjaga keamanan dan keandalan website.</li>
+          <li>Memahami penggunaan website secara statistik untuk memperbaiki isi dan tampilannya.</li>
         </ul>
         <p>Kami tidak menjual data pribadi Anda dan tidak menggunakannya untuk iklan.</p>
 
         <h2 id="dasar">3. Dasar pemrosesan</h2>
         <ul>
           <li><strong>Persetujuan Anda</strong>, yang Anda berikan saat mengisi dan mengirim formulir kontak.</li>
-          <li><strong>Kepentingan yang sah</strong>, untuk menjaga keamanan website dan mencegah penyalahgunaan.</li>
+          <li><strong>Kepentingan yang sah</strong>, untuk menjaga keamanan website, mencegah penyalahgunaan, dan memahami penggunaan website secara statistik.</li>
           <li><strong>Kewajiban hukum</strong>, bila peraturan perundang-undangan mewajibkan kami menyimpan atau mengungkapkan data tertentu.</li>
         </ul>
 
@@ -93,8 +97,15 @@ const sections = [
             <dd>Verifikasi keamanan di formulir kontak untuk membedakan manusia dari bot. Memproses data teknis perangkat dan alamat IP.</dd>
           </div>
           <div>
+            <dt>Resend, Inc.</dt>
+            <dd>Pengiriman isi formulir kontak sebagai email ke kotak masuk kami.</dd>
+          </div>
+          <div>
             <dt>Google LLC</dt>
-            <dd>Layanan email perusahaan tempat pesan formulir diterima, serta peta Google Maps di halaman Hubungi Kami.</dd>
+            <dd>
+              Google Analytics dan Google Tag Manager untuk statistik kunjungan, layanan email perusahaan tempat pesan formulir
+              diterima, serta peta Google Maps di halaman Hubungi Kami.
+            </dd>
           </div>
         </dl>
         <p>
@@ -104,7 +115,7 @@ const sections = [
 
         <h2 id="penyimpanan">5. Penyimpanan &amp; keamanan</h2>
         <p>
-          Website ini tidak menyimpan isi formulir di database. Pesan Anda diteruskan langsung sebagai email ke kotak masuk
+          Website ini tidak menyimpan isi formulir di database. Pesan Anda dikirim sebagai email ke kotak masuk
           {` ${site.email}`}, yang hanya dapat diakses oleh tim yang berwenang.
         </p>
         <p>
@@ -115,11 +126,16 @@ const sections = [
 
         <h2 id="cookie">6. Cookie</h2>
         <p>
-          Website ini tidak memasang cookie analitik atau iklan. Layanan pihak ketiga yang tertanam di website, yaitu verifikasi
-          keamanan Cloudflare dan peta Google Maps, dapat menggunakan cookie atau teknologi serupa sesuai kebijakan privasi
+          Google Analytics menyimpan cookie (misalnya <code>_ga</code>) di browser Anda untuk membedakan kunjungan. Verifikasi
+          keamanan Cloudflare dan peta Google Maps juga dapat menggunakan cookie atau teknologi serupa sesuai kebijakan privasi
           masing-masing:
           <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener">Cloudflare</a> dan
           <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google</a>.
+        </p>
+        <p>
+          Anda dapat menolak atau menghapus cookie melalui pengaturan browser, atau memasang
+          <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">add-on penolakan Google Analytics</a>.
+          Website tetap dapat digunakan tanpa cookie tersebut.
         </p>
 
         <h2 id="hak">7. Hak Anda</h2>
