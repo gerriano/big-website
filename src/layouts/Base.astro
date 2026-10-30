@@ -18,20 +18,28 @@ const fullTitle = title ? `${title} — ${site.companyName}` : `${site.companyNa
 const canonical = new URL(Astro.url.pathname.replace(/(.)\/$/, '$1'), Astro.site);
 // Keep the temporary *.vercel.app site out of search results; indexing turns on with the real domain.
 const noindex = Astro.site?.hostname.endsWith('.vercel.app') ?? false;
+// Analytics only on Vercel production builds, so previews and local dev never pollute the data.
+const isProduction = process.env.VERCEL_ENV === 'production';
 ---
 
 <!doctype html>
 <html lang="id">
   <head>
-    <!-- Google Tag Manager -->
-    <script is:inline async src="https://www.googletagmanager.com/gtm.js?id=GTM-5MCN5ZMD"></script>
-    <script is:inline>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag('js', new Date());
-    </script>
+    {
+      isProduction && (
+        <>
+          <!-- Google Tag Manager -->
+          <script is:inline async src="https://www.googletagmanager.com/gtm.js?id=GTM-5MCN5ZMD"></script>
+          <script is:inline>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+              dataLayer.push(arguments);
+            }
+            gtag('js', new Date());
+          </script>
+        </>
+      )
+    }
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
