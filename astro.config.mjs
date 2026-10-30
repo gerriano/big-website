@@ -25,6 +25,8 @@ export default defineConfig({
       MAIL_TO: envField.string({ context: 'server', access: 'secret', default: 'info@bhineka.global' }),
       MAIL_FROM: envField.string({ context: 'server', access: 'secret', optional: true }),
       TURNSTILE_SECRET_KEY: envField.string({ context: 'server', access: 'secret', optional: true }),
+      // Set by Vercel at runtime ('production' | 'preview' | 'development'); production refuses the test captcha key.
+      VERCEL_ENV: envField.string({ context: 'server', access: 'secret', optional: true }),
       // Cloudflare's always-pass test key is the fallback until the real key is configured.
       PUBLIC_TURNSTILE_SITE_KEY: envField.string({ context: 'client', access: 'public', default: '1x00000000000000000000AA' }),
       GITHUB_OAUTH_CLIENT_ID: envField.string({ context: 'server', access: 'secret', optional: true }),
