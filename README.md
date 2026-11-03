@@ -38,11 +38,17 @@ Lihat `.env.example`. Isi di **Vercel → Project → Settings → Environment V
 
 | Variabel | Fungsi |
 | --- | --- |
-| `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS` | Server email dari tim IT (cPanel). Port 465 → `SMTP_SECURE=true`; port 587 → `false` |
+| `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS` | Pengirim email lewat Resend: `smtp.resend.com`, port 465, `SMTP_SECURE=true`, `SMTP_USER=resend`, `SMTP_PASS` = API key Resend (lihat di bawah) |
 | `MAIL_TO` | Tujuan notifikasi (default `info@bhineka.global`) |
-| `MAIL_FROM` | Alamat pengirim (default = `SMTP_USER`) |
+| `MAIL_FROM` | Alamat pengirim, mis. `website@bhineka.global`. **Wajib untuk Resend**; tanpa alamat email yang valid form menolak kiriman |
 | `PUBLIC_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY` | Captcha Cloudflare Turnstile (scope **Production**). Tanpa ini, lokal & preview memakai test key yang selalu lolos; **Production menolak semua kiriman form** sampai kunci asli diisi. |
 | `GITHUB_OAUTH_CLIENT_ID`, `GITHUB_OAUTH_CLIENT_SECRET` | Login CMS |
+
+### Menyiapkan pengiriman email (Resend)
+Email bhineka.global ada di Google Workspace, tetapi website mengirim notifikasi lewat Resend supaya tidak memegang akses ke mailbox.
+1. resend.com → Domains → `bhineka.global` (region Tokyo). Tambahkan record yang ditampilkan ke DNS Cloudflare yang memegang domain: TXT `resend._domainkey`, CNAME `rsend` dan `send` (**DNS only**), opsional TXT `_dmarc`. Record MX dan SPF Google di root domain **tidak** diubah.
+2. Setelah domain *Verified*: API Keys → buat key dengan permission *Sending access* untuk domain `bhineka.global`.
+3. Isi di Vercel (Production): `SMTP_HOST=smtp.resend.com`, `SMTP_USER=resend`, `MAIL_FROM=website@bhineka.global` (Config), `SMTP_PASS` = API key (Secret), lalu *Redeploy*.
 
 ### Membuat kunci Turnstile
 1. Cloudflare dashboard (akun gratis; domain **tidak** perlu dipindah ke Cloudflare) → Turnstile → *Add widget*.

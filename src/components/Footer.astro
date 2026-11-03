@@ -44,6 +44,8 @@ const year = new Date().getFullYear();
       <a href={`mailto:${site.email}`}>{site.email}</a>
     </p>
     <p>
+      <a href="/kebijakan-privasi">Kebijakan Privasi</a>
+      <span class="footer-sep" aria-hidden="true">·</span>
       © {year}
       {site.companyName}
     </p>
@@ -134,6 +136,10 @@ const year = new Date().getFullYear();
     padding-top: 24px;
     border-top: 1px solid var(--line-light);
     font-size: 0.82rem;
+  }
+
+  .footer-sep {
+    margin-inline: 8px;
   }
 
   @media (max-width: 960px) {
